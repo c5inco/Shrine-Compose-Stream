@@ -1,6 +1,8 @@
 package com.example.shrinecompose
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
@@ -17,9 +19,10 @@ fun Cart() {
     Column(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        val cartSize = 5
+        val cartSize = 15
 
         Row(
             Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
