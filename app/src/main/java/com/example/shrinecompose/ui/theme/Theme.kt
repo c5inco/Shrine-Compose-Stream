@@ -69,3 +69,31 @@ fun ThemeTest() {
         }
     }
 }
+
+@Preview(name = "Typography test", widthDp = 720, showBackground = true)
+@Composable
+fun TypographyThemeTest() {
+    ShrineComposeTheme {
+        Column {
+            Text(
+                "H1 / Rubik Light",
+                style = MaterialTheme.typography.h1
+            )
+            Text("H2 / Rubik Light",
+                style = MaterialTheme.typography.h2
+            )
+            Text("H3 / Rubik Regular",
+                style = MaterialTheme.typography.h3
+            )
+            Text("Body1 / Rubik Regular",
+                style = MaterialTheme.typography.body1
+            )
+            Text("Button / Rubik Medium".toUpperCase(),
+                style = MaterialTheme.typography.button
+            )
+            Text("Caption / Rubik Regular",
+                style = MaterialTheme.typography.caption
+            )
+        }
+    }
+}
