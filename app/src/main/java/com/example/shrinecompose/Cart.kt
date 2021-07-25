@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,7 +56,9 @@ fun CartHeaderPreview() {
 }
 
 @Composable
-private fun CartItem(i: Int) {
+private fun CartItem(
+    item: ItemData
+) {
     Row(
         Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -78,8 +81,9 @@ private fun CartItem(i: Int) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = "Item image",
+                    painter = painterResource(id = item.photoResId),
+                    contentDescription = "Image for: ${item.title}",
+                    contentScale = ContentScale.FillHeight,
                     modifier = Modifier.size(80.dp)
                 )
                 Spacer(Modifier.width(20.dp))
@@ -91,16 +95,16 @@ private fun CartItem(i: Int) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Vendor name $i".uppercase(),
+                            text = "${item.vendor}".uppercase(),
                             style = MaterialTheme.typography.body2,
                         )
                         Text(
-                            text = "$100.00",
+                            text = "$${item.price}",
                             style = MaterialTheme.typography.body2,
                         )
                     }
                     Text(
-                        text = "Awesome item",
+                        text = item.title,
                         style = MaterialTheme.typography.subtitle2,
                     )
                 }
@@ -114,28 +118,28 @@ private fun CartItem(i: Int) {
 fun CartItemPreview() {
     ShrineComposeTheme {
         Surface(color = MaterialTheme.colors.secondary) {
-            CartItem(0)
+            CartItem(SampleItemsData[0])
         }
     }
 }
 
 @Composable
-fun Cart() {
+fun Cart(
+    items: List<ItemData> = SampleItemsData
+) {
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        val cartSize = 15
-
-        CartHeader(cartSize)
+        CartHeader(items.size)
 
         // Items
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            for (i in 1..cartSize) {
-                CartItem(i)
+            items.forEach { item ->
+                CartItem(item)
             }
         }
 
