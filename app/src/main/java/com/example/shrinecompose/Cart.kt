@@ -127,34 +127,38 @@ fun CartItemPreview() {
 fun Cart(
     items: List<ItemData> = SampleItemsData
 ) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    Surface(
+        color = MaterialTheme.colors.secondary
     ) {
-        CartHeader(items.size)
-
-        // Items
         Column(
-            modifier = Modifier.fillMaxWidth()
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            items.forEach { item ->
-                CartItem(item)
-            }
-        }
+            CartHeader(items.size)
 
-        Button(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            onClick = {}
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.AddShoppingCart,
-                contentDescription = "Add to card icon"
-            )
-            Spacer(Modifier.width(16.dp))
-            Text("Add to cart".uppercase())
+            // Items
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items.forEach { item ->
+                    CartItem(item)
+                }
+            }
+
+            Button(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.AddShoppingCart,
+                    contentDescription = "Add to card icon"
+                )
+                Spacer(Modifier.width(16.dp))
+                Text("Add to cart".uppercase())
+            }
         }
     }
 }
@@ -163,11 +167,6 @@ fun Cart(
 @Composable
 fun CartPreview() {
     ShrineComposeTheme {
-        Surface(
-            Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.secondary
-        ) {
-            Cart()
-        }
+        Cart()
     }
 }
