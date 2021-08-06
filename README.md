@@ -19,10 +19,14 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 - Using @Preview for your design components
 - Deploying our first screen to a device!
 
-## 🧰 Other resources
+## 🧰 Helpful resources
 
-- [Beginner Kotlin course on Codeacademy](https://www.codecademy.com/learn/learn-kotlin)
+- [Compose tutorial](https://developer.android.com/jetpack/compose/tutorial)
+- [Compose guides](https://developer.android.com/jetpack/compose/documentation)
+- [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
 - [Material studies](https://material.io/design/material-studies)
+- [Compose sample apps on GitHub](https://github.com/android/compose-samples)
+- [Beginner Kotlin course on Codeacademy](https://www.codecademy.com/learn/learn-kotlin)
 
 
 
