@@ -3,12 +3,24 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 
 ## 🧑‍💻 Development setup
 
-- [Android Studio Arctic Fox 2020.3.1](https://developer.android.com/studio)
+- [Android Studio Arctic Fox 2020.3.1](https://developer.android.com/studio) or newer
 - [Compose 1.0.0](https://developer.android.com/jetpack/compose)
 
 
 ## 📚 Topics covered
 
+### Episode 2
+- Intro to state management
+- Slot-based approach in Compose
+- Creating the navigation [Backdrop](https://developer.android.com/jetpack/compose/layouts/material#backdrop) menu
+  - Layers
+    - Placeholder front layer
+    - TopAppBar
+    - Back layer with menu items
+  - State
+    - Show selection of nav menu item
+
+### Episode 1
 - Compose basics on building UI
 - Material Theming
   - Color, shape, and typography
@@ -21,13 +33,21 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 
 ## 🧰 Helpful resources
 
-- [Compose tutorial](https://developer.android.com/jetpack/compose/tutorial)
-- [Compose guides](https://developer.android.com/jetpack/compose/documentation)
-- [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
-- [Material studies](https://material.io/design/material-studies)
-- [Compose sample apps on GitHub](https://github.com/android/compose-samples)
-- [Learn Kotlin by example](https://play.kotlinlang.org/byExample/overview)
-- [Beginner Kotlin course on Codeacademy](https://www.codecademy.com/learn/learn-kotlin)
+- Episode streams
+  - [Episode 1](https://www.youtube.com/watch?v=6-1l2nrJpqI)
+- Compose Material
+  - [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
+  - [Compose Material Components layout guide](https://developer.android.com/jetpack/compose/layouts/material)
+- General Compose
+  - [Compose tutorial](https://developer.android.com/jetpack/compose/tutorial)
+  - [Compose guides](https://developer.android.com/jetpack/compose/documentation)
+  - [Compose sample apps on GitHub](https://github.com/android/compose-samples)
+- Design resources
+  - "Slot" method in Figma - [YouTube](https://www.youtube.com/watch?v=FOGgsPz3UTk), [Community file](https://www.figma.com/community/file/969234311094210750)
+  - [Material studies](https://material.io/design/material-studies)
+- Kotlin resources
+  - [Learn Kotlin by example](https://play.kotlinlang.org/byExample/overview)
+  - [Beginner Kotlin course on Codeacademy](https://www.codecademy.com/learn/learn-kotlin)
 
 
 
