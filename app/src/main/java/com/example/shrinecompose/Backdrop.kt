@@ -1,10 +1,13 @@
 package com.example.shrinecompose
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
+import kotlinx.coroutines.launch
 
 @Composable
 private fun TopAppBarText(
@@ -67,14 +71,21 @@ private fun MenuSearchField() {
 
 @Composable
 private fun ShrineTopAppBar(
-    backdropRevealed: Boolean
+    backdropRevealed: Boolean,
+    onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     TopAppBar(
         title = {
             Box(
                 Modifier
                     .width(46.dp)
-                    .fillMaxHeight(),
+                    .fillMaxHeight()
+                    .toggleable(
+                        value = backdropRevealed,
+                        onValueChange = { onBackdropReveal(it) },
+                        indication = rememberRipple(bounded = false, radius = 56.dp),
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
                 contentAlignment = Alignment.CenterStart
             ) {
                 if (!backdropRevealed) {
@@ -127,12 +138,26 @@ fun ShrineTopAppBarPreview() {
 @Composable
 fun Backdrop() {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
+    var backdropRevealed by remember { mutableStateOf(scaffoldState.isRevealed) }
+    val scope = rememberCoroutineScope()
 
     BackdropScaffold(
         scaffoldState = scaffoldState,
         gesturesEnabled = false,
         appBar = {
-            ShrineTopAppBar(backdropRevealed = scaffoldState.isRevealed)
+            ShrineTopAppBar(
+                backdropRevealed = backdropRevealed,
+                onBackdropReveal = {
+                    backdropRevealed = it
+                    scope.launch {
+                        if (scaffoldState.isConcealed) {
+                            scaffoldState.reveal()
+                        } else {
+                            scaffoldState.conceal()
+                        }
+                    }
+                }
+            )
         },
         frontLayerContent = {
             Column(
