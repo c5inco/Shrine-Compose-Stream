@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -134,6 +135,80 @@ fun ShrineTopAppBarPreview() {
     }
 }
 
+@Composable
+private fun MenuText(
+    text: String = "Item",
+) {
+    Box(
+        modifier = Modifier.height(44.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text.uppercase(),
+            style = MaterialTheme.typography.subtitle1
+        )
+    }
+}
+
+@Composable
+fun MenuItem(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .clip(MaterialTheme.shapes.medium)
+            .then(modifier)
+    ) {
+        content()
+    }
+}
+
+@Composable
+private fun NavigationMenu(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Category.values().forEachIndexed { idx, category ->
+                MenuItem {
+                    MenuText(category.toString())
+                }
+            }
+            MenuItem {
+                Divider(
+                    modifier = Modifier
+                        .width(56.dp)
+                        .padding(vertical = 12.dp),
+                    color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+                )
+            }
+            MenuItem {
+                MenuText("Logout")
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun NavigationMenuPreview() {
+    ShrineComposeTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            NavigationMenu(Modifier.padding(vertical = 8.dp))
+        }
+    }
+}
+
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop() {
@@ -169,9 +244,9 @@ fun Backdrop() {
             }
         },
         backLayerContent = {
-            Column(Modifier.padding(20.dp)) {
-                Text("This is the content for backLayer")
-            }
+            NavigationMenu(
+                modifier = Modifier.padding(top = 12.dp, bottom = 32.dp)
+            )
         },
         frontLayerShape = MaterialTheme.shapes.large,
         frontLayerElevation = 16.dp
