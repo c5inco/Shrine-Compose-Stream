@@ -1,5 +1,7 @@
 package com.example.shrinecompose
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
@@ -138,11 +140,13 @@ fun ShrineTopAppBarPreview() {
 @Composable
 private fun MenuText(
     text: String = "Item",
+    activeDecoration: @Composable () -> Unit = {},
 ) {
     Box(
         modifier = Modifier.height(44.dp),
         contentAlignment = Alignment.Center
     ) {
+        activeDecoration()
         Text(
             text = text.uppercase(),
             style = MaterialTheme.typography.subtitle1
@@ -168,7 +172,9 @@ fun MenuItem(
 
 @Composable
 private fun NavigationMenu(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activeCategory: Category = Category.All,
+    onMenuSelect: (Category) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -180,8 +186,20 @@ private fun NavigationMenu(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Category.values().forEachIndexed { idx, category ->
-                MenuItem {
-                    MenuText(category.toString())
+                MenuItem(
+                    modifier = Modifier.clickable { onMenuSelect(category) }
+                ) {
+                    MenuText(
+                        text = category.toString(),
+                        activeDecoration = {
+                            if (category == activeCategory) {
+                                Image(
+                                    painterResource(id = R.drawable.ic_tab_indicator),
+                                    contentDescription = "Active category icon"
+                                )
+                            }
+                        }
+                    )
                 }
             }
             MenuItem {
@@ -204,7 +222,12 @@ private fun NavigationMenu(
 fun NavigationMenuPreview() {
     ShrineComposeTheme {
         Surface(color = MaterialTheme.colors.background) {
-            NavigationMenu(Modifier.padding(vertical = 8.dp))
+            var activeCategory by remember { mutableStateOf(Category.Accessories) }
+            NavigationMenu(
+                modifier = Modifier.padding(vertical = 8.dp),
+                activeCategory = activeCategory,
+                onMenuSelect = { activeCategory = it }
+            )
         }
     }
 }
@@ -215,6 +238,7 @@ fun Backdrop() {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
     var backdropRevealed by remember { mutableStateOf(scaffoldState.isRevealed) }
     val scope = rememberCoroutineScope()
+    var activeCategory by remember { mutableStateOf(Category.All) }
 
     BackdropScaffold(
         scaffoldState = scaffoldState,
@@ -240,12 +264,18 @@ fun Backdrop() {
                     .fillMaxSize()
                     .padding(20.dp)
             ) {
-                Text("This is the content for frontLayer")
+                Text("This is the content for category: $activeCategory")
             }
         },
         backLayerContent = {
             NavigationMenu(
-                modifier = Modifier.padding(top = 12.dp, bottom = 32.dp)
+                modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
+                activeCategory = activeCategory,
+                onMenuSelect = {
+                    backdropRevealed = false
+                    activeCategory = it
+                    scope.launch { scaffoldState.conceal() }
+                }
             )
         },
         frontLayerShape = MaterialTheme.shapes.large,
