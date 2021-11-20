@@ -16,6 +16,11 @@
 
 package com.example.shrinecompose
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -88,6 +93,7 @@ private fun MenuSearchField() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 private fun ShrineTopAppBar(
     backdropRevealed: Boolean,
@@ -107,16 +113,41 @@ private fun ShrineTopAppBar(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                if (!backdropRevealed) {
+                AnimatedVisibility(
+                    visible = !backdropRevealed,
+                    enter = fadeIn(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing))
+                            + slideInHorizontally(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 120, easing = LinearEasing))
+                            + slideOutHorizontally(animationSpec = tween(durationMillis = 120, easing = LinearEasing)),
+                    label = "Menu navigation icon"
+                ) {
                     Icon(
                         painterResource(id = R.drawable.ic_menu_cut_24px),
                         contentDescription = "Menu navigation icon"
                     )
                 }
+
+                val logoTransition = updateTransition(
+                    targetState = backdropRevealed,
+                    label = "logoTransition"
+                )
+                val logoOffset by logoTransition.animateDp(
+                    transitionSpec = {
+                        if (targetState) {
+                            tween(durationMillis = 120, easing = LinearEasing)
+                        } else {
+                            tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
+                        }
+                    },
+                    label = "logoOffset"
+                ) { revealed ->
+                    if (!revealed) 20.dp else 0.dp
+                }
+
                 Icon(
                     painterResource(id = R.drawable.ic_shrine_logo),
                     contentDescription = "Shrine logo",
-                    modifier = Modifier.offset(x = if (!backdropRevealed) 20.dp else 0.dp)
+                    modifier = Modifier.offset(x = logoOffset)
                 )
             }
 
@@ -139,6 +170,7 @@ private fun ShrineTopAppBar(
     )
 }
 
+@ExperimentalAnimationApi
 @Preview
 @Composable
 fun ShrineTopAppBarPreview() {
@@ -248,6 +280,7 @@ fun NavigationMenuPreview() {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop() {
@@ -299,6 +332,7 @@ fun Backdrop() {
     )
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Preview
 @Composable
