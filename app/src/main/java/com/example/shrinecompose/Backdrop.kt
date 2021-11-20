@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -151,10 +152,32 @@ private fun ShrineTopAppBar(
                 )
             }
 
-            if (!backdropRevealed) {
-                TopAppBarText(text = "Shrine")
-            } else {
-                MenuSearchField()
+            val density = LocalDensity.current
+
+            AnimatedContent(
+                targetState = backdropRevealed,
+                transitionSpec = {
+                    if (targetState) {
+                        // Conceal to reveal
+                        fadeIn(animationSpec = tween(durationMillis = 240, delayMillis = 120, easing = LinearEasing)) +
+                            slideInHorizontally(initialOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 270)) with
+                        fadeOut(animationSpec = tween(durationMillis = 120, easing = LinearEasing)) +
+                            slideOutHorizontally(targetOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270))
+                    } else {
+                        // Reveal to conceal
+                        fadeIn(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)) +
+                            slideInHorizontally(initialOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 350)) with
+                        fadeOut(animationSpec = tween(durationMillis = 90, easing = LinearEasing)) +
+                            slideOutHorizontally(targetOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 350))
+                    }.using(SizeTransform(clip = false))
+                },
+                contentAlignment = Alignment.CenterStart
+            ) { revealed ->
+                if (!revealed) {
+                    TopAppBarText(text = "Shrine")
+                } else {
+                    MenuSearchField()
+                }
             }
         },
         actions = {
