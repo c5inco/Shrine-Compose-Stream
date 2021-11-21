@@ -225,14 +225,21 @@ private fun MenuText(
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun MenuItem(
+fun AnimatedVisibilityScope.MenuItem(
     modifier: Modifier = Modifier,
+    index: Int,
     content: @Composable () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
+            .animateEnterExit(
+                enter = fadeIn(animationSpec = tween(durationMillis = 240, delayMillis = index * 15 + 60, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(durationMillis = 90, easing = LinearEasing)),
+                label = "Menu item $index"
+            )
             .fillMaxWidth(0.5f)
             .clip(MaterialTheme.shapes.medium)
             .then(modifier)
@@ -241,9 +248,11 @@ fun MenuItem(
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 private fun NavigationMenu(
     modifier: Modifier = Modifier,
+    backdropRevealed: Boolean = true,
     activeCategory: Category = Category.All,
     onMenuSelect: (Category) -> Unit = {}
 ) {
@@ -253,41 +262,52 @@ private fun NavigationMenu(
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        AnimatedVisibility(
+            visible = backdropRevealed,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None,
+            label = "Navigation menu"
         ) {
-            Category.values().forEachIndexed { idx, category ->
-                MenuItem(
-                    modifier = Modifier.clickable { onMenuSelect(category) }
-                ) {
-                    MenuText(
-                        text = category.toString(),
-                        activeDecoration = {
-                            if (category == activeCategory) {
-                                Image(
-                                    painterResource(id = R.drawable.ic_tab_indicator),
-                                    contentDescription = "Active category icon"
-                                )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val categories = Category.values()
+
+                categories.forEachIndexed { idx, category ->
+                    MenuItem(
+                        modifier = Modifier.clickable { onMenuSelect(category) },
+                        index = idx
+                    ) {
+                        MenuText(
+                            text = category.toString(),
+                            activeDecoration = {
+                                if (category == activeCategory) {
+                                    Image(
+                                        painterResource(id = R.drawable.ic_tab_indicator),
+                                        contentDescription = "Active category icon"
+                                    )
+                                }
                             }
-                        }
+                        )
+                    }
+                }
+                MenuItem(index = categories.size) {
+                    Divider(
+                        modifier = Modifier
+                            .width(56.dp)
+                            .padding(vertical = 12.dp),
+                        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
                     )
                 }
-            }
-            MenuItem {
-                Divider(
-                    modifier = Modifier
-                        .width(56.dp)
-                        .padding(vertical = 12.dp),
-                    color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-                )
-            }
-            MenuItem {
-                MenuText("Logout")
+                MenuItem(index = categories.size + 1) {
+                    MenuText("Logout")
+                }
             }
         }
     }
 }
 
+@ExperimentalAnimationApi
 @Preview
 @Composable
 fun NavigationMenuPreview() {
@@ -342,6 +362,7 @@ fun Backdrop() {
         backLayerContent = {
             NavigationMenu(
                 modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
+                backdropRevealed = backdropRevealed,
                 activeCategory = activeCategory,
                 onMenuSelect = {
                     backdropRevealed = false
