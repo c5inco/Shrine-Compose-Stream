@@ -3,11 +3,21 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 
 ## 🧑‍💻 Development setup
 
-- [Android Studio Arctic Fox 2020.3.1](https://developer.android.com/studio) or newer
-- [Compose 1.0.0](https://developer.android.com/jetpack/compose)
+- [Android Studio Chipmunk 2021.2.1 Canary 5](https://developer.android.com/studio) or newer
+- [Compose 1.1.0-beta02](https://developer.android.com/jetpack/compose)
 
+**Note:** Above versions equired only for specific Animation Inspector features, otherwise Arctic Fox 2020.3.1 and Compose 1.0.0 should still work at a minimum to build and deploy the app
 
 ## 📚 Topics covered
+
+### Episode 3
+- Intro to animation
+  - [APIs](https://developer.android.com/jetpack/compose/animation) (updateTransition, AnimatedVisibility, AnimatedContent)
+  - Animation Inspector
+- Animating parts of Backdrop
+  - [Motion in Shrine](https://material.io/design/material-studies/shrine.html#motion)
+  - TopAppBar Text <-> Search field
+  - Navigation menu items
 
 ### Episode 2
 - Intro to state management
@@ -34,6 +44,7 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 ## 🧰 Helpful resources
 
 - Episode streams
+  - [Episode 2]
   - [Episode 1](https://www.youtube.com/watch?v=6-1l2nrJpqI)
 - Compose Material
   - [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
