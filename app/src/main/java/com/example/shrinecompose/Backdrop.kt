@@ -339,12 +339,14 @@ fun Backdrop() {
             ShrineTopAppBar(
                 backdropRevealed = backdropRevealed,
                 onBackdropReveal = {
-                    backdropRevealed = it
-                    scope.launch {
-                        if (scaffoldState.isConcealed) {
-                            scaffoldState.reveal()
-                        } else {
-                            scaffoldState.conceal()
+                    if (!scaffoldState.isAnimationRunning) {
+                        backdropRevealed = it
+                        scope.launch {
+                            if (scaffoldState.isConcealed) {
+                                scaffoldState.reveal()
+                            } else {
+                                scaffoldState.conceal()
+                            }
                         }
                     }
                 }
