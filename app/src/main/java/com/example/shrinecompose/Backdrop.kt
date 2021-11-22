@@ -102,6 +102,8 @@ private fun ShrineTopAppBar(
 ) {
     TopAppBar(
         title = {
+            val density = LocalDensity.current
+
             Box(
                 Modifier
                     .width(46.dp)
@@ -117,9 +119,9 @@ private fun ShrineTopAppBar(
                 AnimatedVisibility(
                     visible = !backdropRevealed,
                     enter = fadeIn(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing))
-                            + slideInHorizontally(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)),
+                            + slideInHorizontally(initialOffsetX = { with(density) { (-20).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)),
                     exit = fadeOut(animationSpec = tween(durationMillis = 120, easing = LinearEasing))
-                            + slideOutHorizontally(animationSpec = tween(durationMillis = 120, easing = LinearEasing)),
+                            + slideOutHorizontally(targetOffsetX = { with(density) { (-20).dp.roundToPx() } }, animationSpec = tween(durationMillis = 120, easing = LinearEasing)),
                     label = "Menu navigation icon"
                 ) {
                     Icon(
@@ -137,7 +139,7 @@ private fun ShrineTopAppBar(
                         if (targetState) {
                             tween(durationMillis = 120, easing = LinearEasing)
                         } else {
-                            tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)
+                            tween(durationMillis = 270, easing = LinearEasing)
                         }
                     },
                     label = "logoOffset"
@@ -152,23 +154,21 @@ private fun ShrineTopAppBar(
                 )
             }
 
-            val density = LocalDensity.current
-
             AnimatedContent(
                 targetState = backdropRevealed,
                 transitionSpec = {
                     if (targetState) {
                         // Conceal to reveal
                         fadeIn(animationSpec = tween(durationMillis = 240, delayMillis = 120, easing = LinearEasing)) +
-                            slideInHorizontally(initialOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 270)) with
+                            slideInHorizontally(initialOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) with
                         fadeOut(animationSpec = tween(durationMillis = 120, easing = LinearEasing)) +
-                            slideOutHorizontally(targetOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270))
+                            slideOutHorizontally(targetOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 120, easing = LinearEasing))
                     } else {
                         // Reveal to conceal
                         fadeIn(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)) +
-                            slideInHorizontally(initialOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 350)) with
+                            slideInHorizontally(initialOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) with
                         fadeOut(animationSpec = tween(durationMillis = 90, easing = LinearEasing)) +
-                            slideOutHorizontally(targetOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 350))
+                            slideOutHorizontally(targetOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 90, easing = LinearEasing))
                     }.using(SizeTransform(clip = false))
                 },
                 contentAlignment = Alignment.CenterStart
