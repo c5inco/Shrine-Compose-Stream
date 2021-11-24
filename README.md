@@ -44,7 +44,7 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 ## 🧰 Helpful resources
 
 - Episode streams
-  - [Episode 2]
+  - [Episode 2]()
   - [Episode 1](https://www.youtube.com/watch?v=6-1l2nrJpqI)
 - Compose Material
   - [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
