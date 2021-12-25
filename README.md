@@ -49,7 +49,6 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
   - [Learn Kotlin by example](https://play.kotlinlang.org/byExample/overview)
   - [Beginner Kotlin course on Codeacademy](https://www.codecademy.com/learn/learn-kotlin)
 
+## Disclaimer
 
-
-
-
+This project is not an official Google project. It is not supported by Google and Google specifically disclaims all warranties as to its quality, merchantability, or fitness for a particular purpose.
