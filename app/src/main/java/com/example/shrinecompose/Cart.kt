@@ -17,17 +17,21 @@
 package com.example.shrinecompose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RemoveCircleOutline
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -180,10 +184,88 @@ fun Cart(
     }
 }
 
-@Preview(name = "Full cart", device = Devices.PIXEL_4)
+@Preview(device = Devices.PIXEL_4)
 @Composable
-fun CartPreview() {
+fun ExpandedCartPreview() {
     ShrineComposeTheme {
         Cart()
+    }
+}
+
+@Composable
+private fun CollapsedCart(
+    items: List<ItemData> = SampleItems.subList(fromIndex = 0, toIndex = 2),
+    onTap: () -> Unit = {}
+) {
+    Row(
+        Modifier
+            .clickable { onTap() }
+            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Box(
+            Modifier.size(40.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "Shopping cart icon",
+            )
+        }
+        items.forEach { item ->
+            CollapsedCartItem(data = item)
+        }
+    }
+}
+
+@Composable
+private fun CollapsedCartItem(data: ItemData) {
+    Image(
+        painter = painterResource(id = data.photoResId),
+        contentDescription = data.title,
+        alignment = Alignment.TopCenter,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(10.dp))
+    )
+}
+
+@Preview
+@Composable
+fun CollapsedCartPreview() {
+    ShrineComposeTheme {
+        Surface(
+            color = MaterialTheme.colors.secondary
+        ) {
+            CollapsedCart()
+        }
+    }
+}
+
+@Composable
+fun CartBottomSheet(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.height(56.dp),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colors.secondary,
+        elevation = 8.dp
+    ) {
+        CollapsedCart()
+    }
+}
+
+@Preview(device = Devices.PIXEL_4)
+@Composable
+fun CartBottomSheetPreview() {
+    ShrineComposeTheme {
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            CartBottomSheet(Modifier.align(Alignment.BottomEnd))
+        }
     }
 }
