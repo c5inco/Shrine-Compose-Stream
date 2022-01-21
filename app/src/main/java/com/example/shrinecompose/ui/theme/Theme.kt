@@ -104,7 +104,7 @@ fun TypographyThemeTest() {
             Text("Body1 / Rubik Regular",
                 style = MaterialTheme.typography.body1
             )
-            Text("Button / Rubik Medium".toUpperCase(),
+            Text("Button / Rubik Medium".uppercase(),
                 style = MaterialTheme.typography.button
             )
             Text("Caption / Rubik Regular",
