@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.SampleData.Companion.SampleItems
-import com.example.shrinecompose.ui.theme.Theme.Companion.ShrineComposeTheme
+import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
 @Composable
 private fun CartHeader(cartSize: Int) {
