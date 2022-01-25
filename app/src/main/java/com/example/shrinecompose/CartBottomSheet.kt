@@ -259,6 +259,7 @@ fun CollapsedCartPreview() {
 enum class CartBottomSheetState {
     Collapsed,
     Expanded,
+    Hidden,
 }
 
 @ExperimentalAnimationApi
@@ -266,16 +267,17 @@ enum class CartBottomSheetState {
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
     items: List<ItemData> = SampleItems,
+    hidden: Boolean = false,
     maxHeight: Dp,
     maxWidth: Dp,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     val cartTransition = updateTransition(
-        targetState = if (expanded) {
-            CartBottomSheetState.Expanded
-        } else {
-            CartBottomSheetState.Collapsed
+        targetState = when {
+            hidden -> CartBottomSheetState.Hidden
+            expanded -> CartBottomSheetState.Expanded
+            else -> CartBottomSheetState.Collapsed
         },
         label = "cartTransition"
     )
@@ -286,17 +288,21 @@ fun CartBottomSheet(
             when {
                 CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
                     tween(durationMillis = 433, delayMillis = 67)
-                else ->
+                CartBottomSheetState.Collapsed isTransitioningTo CartBottomSheetState.Expanded ->
                     tween(durationMillis = 150)
+                else ->
+                    tween(durationMillis = 450)
             }
         }
     ) {
-        if (it == CartBottomSheetState.Expanded) {
-            0.dp
-        } else {
-            val size = min(2, items.size)
-            var width = 24 + 40 * (size + 1) + 16 * size + 16
-            (maxWidth.value - (width)).dp
+        when (it) {
+            CartBottomSheetState.Hidden -> maxWidth
+            CartBottomSheetState.Expanded -> 0.dp
+            else -> {
+                val size = min(2, items.size)
+                var width = 24 + 40 * (size + 1) + 16 * size + 16
+                (maxWidth.value - (width)).dp
+            }
         }
     }
 
@@ -335,7 +341,7 @@ fun CartBottomSheet(
             .height(cartHeight),
         shape = CutCornerShape(topStart = cornerSize),
         color = MaterialTheme.colors.secondary,
-        elevation = 24.dp
+        elevation = 8.dp
     ) {
         Box {
             cartTransition.AnimatedContent(
@@ -385,10 +391,17 @@ fun CartBottomSheetPreview() {
         BoxWithConstraints(
             Modifier.fillMaxSize()
         ) {
+            var isBottomSheetHidden by remember { mutableStateOf(false) }
+
+            Button(onClick = { isBottomSheetHidden = !isBottomSheetHidden}) {
+                Text("Toggle BottomSheet")
+            }
+
             CartBottomSheet(
                 modifier = Modifier.align(Alignment.BottomEnd),
+                hidden = isBottomSheetHidden,
                 maxHeight = maxHeight,
-                maxWidth = maxWidth,
+                maxWidth = maxWidth
             )
         }
     }
