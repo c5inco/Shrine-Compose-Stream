@@ -17,10 +17,7 @@
 package com.example.shrinecompose
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,7 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.AddShoppingCart
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -178,20 +175,6 @@ fun ExpandedCart(
                     CartItem(item)
                 }
             }
-
-            Button(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                onClick = {}
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.AddShoppingCart,
-                    contentDescription = "Add to card icon"
-                )
-                Spacer(Modifier.width(16.dp))
-                Text("Add to cart".uppercase())
-            }
         }
     }
 }
@@ -201,6 +184,23 @@ fun ExpandedCart(
 fun ExpandedCartPreview() {
     ShrineComposeTheme {
         ExpandedCart()
+    }
+}
+
+@Composable
+private fun CheckoutButton() {
+    Button(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        onClick = {}
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.ShoppingCart,
+            contentDescription = "Shopping cart icon"
+        )
+        Spacer(Modifier.width(16.dp))
+        Text("Proceed to checkout".uppercase())
     }
 }
 
@@ -362,6 +362,16 @@ fun CartBottomSheet(
                         onTap = { expanded = true }
                     )
                 }
+            }
+            cartTransition.AnimatedVisibility(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                visible = { it == CartBottomSheetState.Expanded },
+                enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)) +
+                    scaleIn(animationSpec = tween(durationMillis = 250, delayMillis = 250, easing = LinearOutSlowInEasing), initialScale = 0.8f),
+                exit = fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing)) +
+                    scaleOut(animationSpec = tween(durationMillis = 100, easing = FastOutLinearInEasing), targetScale = 0.8f)
+            ) {
+                CheckoutButton()
             }
         }
     }
