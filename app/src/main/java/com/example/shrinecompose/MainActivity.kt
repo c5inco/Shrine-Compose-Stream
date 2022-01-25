@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ShrineComposeTheme {
-                Backdrop()
+                ExpandedCart()
             }
         }
     }
@@ -41,6 +41,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppPreview() {
     ShrineComposeTheme {
-        Cart()
+        ExpandedCart()
     }
 }

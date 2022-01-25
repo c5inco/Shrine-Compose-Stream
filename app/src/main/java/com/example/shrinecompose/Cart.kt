@@ -145,8 +145,9 @@ fun CartItemPreview() {
 }
 
 @Composable
-fun Cart(
-    items: List<ItemData> = SampleItems
+fun ExpandedCart(
+    items: List<ItemData> = SampleItems,
+    onCollapse: () -> Unit = {}
 ) {
     Surface(
         color = MaterialTheme.colors.secondary
@@ -188,7 +189,7 @@ fun Cart(
 @Composable
 fun ExpandedCartPreview() {
     ShrineComposeTheme {
-        Cart()
+        ExpandedCart()
     }
 }
 
