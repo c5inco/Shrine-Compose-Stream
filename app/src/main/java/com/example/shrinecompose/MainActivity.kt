@@ -31,16 +31,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ShrineComposeTheme {
-                ExpandedCart()
+                ShrineApp()
             }
         }
     }
 }
 
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
     ShrineComposeTheme {
-        ExpandedCart()
+        ShrineApp()
     }
 }
