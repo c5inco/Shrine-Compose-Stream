@@ -16,10 +16,16 @@
 
 package com.example.shrinecompose
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -28,7 +34,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.AddShoppingCart
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,9 +42,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.SampleData.Companion.SampleItems
 import com.example.shrinecompose.ui.theme.Theme.Companion.ShrineComposeTheme
+import kotlin.math.min
 
 @Composable
 private fun CartHeader(cartSize: Int, onCollapse: () -> Unit) {
@@ -248,28 +256,130 @@ fun CollapsedCartPreview() {
     }
 }
 
+enum class CartBottomSheetState {
+    Collapsed,
+    Expanded,
+}
+
+@ExperimentalAnimationApi
 @Composable
 fun CartBottomSheet(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    items: List<ItemData> = SampleItems,
+    maxHeight: Dp,
+    maxWidth: Dp,
 ) {
-    Surface(
-        modifier = modifier.height(56.dp),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colors.secondary,
-        elevation = 8.dp
+    var expanded by remember { mutableStateOf(false) }
+
+    val cartTransition = updateTransition(
+        targetState = if (expanded) {
+            CartBottomSheetState.Expanded
+        } else {
+            CartBottomSheetState.Collapsed
+        },
+        label = "cartTransition"
+    )
+
+    val cartXOffset by cartTransition.animateDp(
+        label = "cartXOffset",
+        transitionSpec = {
+            when {
+                CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
     ) {
-        CollapsedCart()
+        if (it == CartBottomSheetState.Expanded) {
+            0.dp
+        } else {
+            val size = min(2, items.size)
+            var width = 24 + 40 * (size + 1) + 16 * size + 16
+            (maxWidth.value - (width)).dp
+        }
+    }
+
+    val cartHeight by cartTransition.animateDp(
+        label = "cartHeight",
+        transitionSpec = {
+            when {
+                CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
+                    tween(durationMillis = 283)
+                else ->
+                    tween(durationMillis = 500)
+            }
+        }
+    ) {
+        if (it == CartBottomSheetState.Expanded) maxHeight else 56.dp
+    }
+
+    val cornerSize by cartTransition.animateDp(
+        label = "cartCornerSize",
+        transitionSpec = {
+            when {
+                CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
+                    tween(durationMillis = 433, delayMillis = 67)
+                else ->
+                    tween(durationMillis = 150)
+            }
+        }
+    ) {
+        if (it == CartBottomSheetState.Expanded) 0.dp else 24.dp
+    }
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .offset(x = cartXOffset)
+            .height(cartHeight),
+        shape = CutCornerShape(topStart = cornerSize),
+        color = MaterialTheme.colors.secondary,
+        elevation = 24.dp
+    ) {
+        Box {
+            cartTransition.AnimatedContent(
+                transitionSpec = {
+                    when {
+                        CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
+                            fadeIn(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)) with
+                                fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
+                        CartBottomSheetState.Collapsed isTransitioningTo CartBottomSheetState.Expanded ->
+                            fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)) with
+                                fadeOut(animationSpec = tween(durationMillis = 150, easing = LinearEasing))
+                        else -> EnterTransition.None with ExitTransition.None
+                    }.using(SizeTransform(clip = false))
+                },
+            ) { targetState ->
+                if (targetState == CartBottomSheetState.Expanded) {
+                    ExpandedCart(
+                        items = items,
+                        onCollapse = { expanded = false }
+                    )
+                } else {
+                    CollapsedCart(
+                        items = items.subList(fromIndex = 0, toIndex = 2),
+                        onTap = { expanded = true }
+                    )
+                }
+            }
+        }
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(device = Devices.PIXEL_4)
 @Composable
 fun CartBottomSheetPreview() {
     ShrineComposeTheme {
-        Box(
+        BoxWithConstraints(
             Modifier.fillMaxSize()
         ) {
-            CartBottomSheet(Modifier.align(Alignment.BottomEnd))
+            CartBottomSheet(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                maxHeight = maxHeight,
+                maxWidth = maxWidth,
+            )
         }
     }
 }
