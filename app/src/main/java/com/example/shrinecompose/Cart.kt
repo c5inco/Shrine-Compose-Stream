@@ -41,12 +41,12 @@ import com.example.shrinecompose.SampleData.Companion.SampleItems
 import com.example.shrinecompose.ui.theme.Theme.Companion.ShrineComposeTheme
 
 @Composable
-private fun CartHeader(cartSize: Int) {
+private fun CartHeader(cartSize: Int, onCollapse: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = {},
+            onClick = { onCollapse() },
             Modifier.padding(4.dp)
         ) {
             Icon(
@@ -71,7 +71,7 @@ fun CartHeaderPreview() {
             Modifier.fillMaxWidth(),
             color = MaterialTheme.colors.secondary
         ) {
-            CartHeader(cartSize = 15)
+            CartHeader(cartSize = 15, onCollapse = {})
         }
     }
 }
@@ -157,7 +157,10 @@ fun ExpandedCart(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CartHeader(items.size)
+            CartHeader(
+                cartSize = items.size,
+                onCollapse = onCollapse
+            )
 
             // Items
             Column(
