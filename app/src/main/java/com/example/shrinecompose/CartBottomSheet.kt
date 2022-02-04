@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.SampleData.Companion.SampleItems
-import com.example.shrinecompose.ui.theme.Theme.Companion.ShrineComposeTheme
+import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 import kotlin.math.min
 
 @Composable
