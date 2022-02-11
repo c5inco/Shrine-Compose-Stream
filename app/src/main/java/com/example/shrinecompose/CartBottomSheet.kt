@@ -169,7 +169,9 @@ fun ExpandedCart(
 
             // Items
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 64.dp)
             ) {
                 items.forEach { item ->
                     CartItem(item)
