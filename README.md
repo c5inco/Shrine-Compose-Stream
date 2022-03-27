@@ -3,12 +3,19 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 
 ## 🧑‍💻 Development setup
 
-- [Android Studio Chipmunk 2021.2.1 Canary 5](https://developer.android.com/studio) or newer
-- [Compose 1.1.0-beta03](https://developer.android.com/jetpack/compose)
+- [Android Studio Dolphin 2021.3.1 Canary 3](https://developer.android.com/studio) or newer
+- [Compose 1.1.0](https://developer.android.com/jetpack/compose)
 
-**Note:** Above versions required only for specific Animation Inspector features, otherwise Arctic Fox 2020.3.1 and Compose 1.0.0 should still work at a minimum to build and deploy the app
+**Note:** Above Studio version required only for specific Animation Inspector features, otherwise Bumblebee 2021.1.1 should still work at a minimum to build and deploy the app
 
 ## 📚 Topics covered
+
+### Episode 4
+- Creating the expanding Cart [BottomSheet](https://material.io/components/sheets-bottom#expanding-bottom-sheet)
+  - Build the collapsed version of Cart
+  - Expanded <-> collapsed transition of Cart
+- Add animated Checkout button to expanded cart
+- Hide/show Cart bottom sheet in coordination with Backdrop
 
 ### Episode 3
 - Intro to animation
@@ -47,6 +54,7 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 ## 🧰 Helpful resources
 
 - Previous episodes
+  - [Episode 3](https://www.youtube.com/watch?v=nCPEuWCQlWk) 
   - [Episode 2](https://www.youtube.com/watch?v=T9uMu8nIVM0)
   - [Episode 1](https://www.youtube.com/watch?v=6-1l2nrJpqI)
 - Compose Material

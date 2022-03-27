@@ -326,7 +326,9 @@ fun NavigationMenuPreview() {
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-fun Backdrop() {
+fun Backdrop(
+    onBackdropReveal: (Boolean) -> Unit = {}
+) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
     var backdropRevealed by remember { mutableStateOf(scaffoldState.isRevealed) }
     val scope = rememberCoroutineScope()
@@ -341,6 +343,7 @@ fun Backdrop() {
                 onBackdropReveal = {
                     if (!scaffoldState.isAnimationRunning) {
                         backdropRevealed = it
+                        onBackdropReveal(it)
                         scope.launch {
                             if (scaffoldState.isConcealed) {
                                 scaffoldState.reveal()
@@ -368,6 +371,7 @@ fun Backdrop() {
                 activeCategory = activeCategory,
                 onMenuSelect = {
                     backdropRevealed = false
+                    onBackdropReveal(false)
                     activeCategory = it
                     scope.launch { scaffoldState.conceal() }
                 }
