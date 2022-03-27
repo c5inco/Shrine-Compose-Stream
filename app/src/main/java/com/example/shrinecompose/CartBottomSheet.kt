@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.shrinecompose.SampleData.Companion.SampleItems
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 import kotlin.math.min
 
@@ -302,7 +301,7 @@ fun CartBottomSheet(
             CartBottomSheetState.Expanded -> 0.dp
             else -> {
                 val size = min(2, items.size)
-                var width = 24 + 40 * (size + 1) + 16 * size + 16
+                val width = 24 + 40 * (size + 1) + 16 * size + 16
                 (maxWidth.value - (width)).dp
             }
         }

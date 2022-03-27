@@ -14,7 +14,7 @@ Repo for building Shrine with Jetpack Compose, on Material Design Live
 - Creating the expanding Cart [BottomSheet](https://material.io/components/sheets-bottom#expanding-bottom-sheet)
   - Build the collapsed version of Cart
   - Expanded <-> collapsed transition of Cart
-- Add animated Checkout button to expanded cart
+- ~~Add animated Checkout button to expanded cart~~
 - Hide/show Cart bottom sheet in coordination with Backdrop
 
 ### Episode 3
