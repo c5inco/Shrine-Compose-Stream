@@ -2,8 +2,11 @@ package com.example.shrinecompose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
@@ -11,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,9 +22,11 @@ import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
 @Composable
 private fun CatalogCard(
+    modifier: Modifier = Modifier,
     data: ItemData
 ) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
@@ -68,17 +74,70 @@ fun CatalogCardPreview() {
 fun Catalog(
     items: List<ItemData>
 ) {
-    Column {
-        items.forEach {
-            Text(it.title)
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+
+    LazyRow(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        itemsIndexed(transformToWeavedList(items)) { idx, item ->
+            val even = idx % 2 == 0
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .width((screenWidth * 0.66f).dp),
+                horizontalAlignment = if (!even) Alignment.CenterHorizontally else Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (even) {
+                    CatalogCard(
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .fillMaxWidth(0.85f),
+                        data = item[0]
+                    )
+                    if (item.getOrNull(1) != null) {
+                        Spacer(Modifier.height(32.dp))
+                        CatalogCard(
+                            modifier = Modifier.fillMaxWidth(0.85f), data = item[1]
+                        )
+                    }
+                } else {
+                    CatalogCard(
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f),
+                        data = item[0]
+                    )
+                }
+            }
         }
     }
+}
+
+private fun <T> transformToWeavedList(items: List<T>): List<List<T>> {
+    var i = 0
+    val list = mutableListOf<List<T>>()
+    while (i < items.size) {
+        val even = i % 3 == 0
+        val wList = mutableListOf<T>()
+        wList.add(items[i])
+        if (even && i + 1 < items.size) wList.add(items[i + 1])
+        list.add(wList.toList())
+        i += if (even) 2 else 1
+    }
+    return list.toList()
 }
 
 @Preview
 @Composable
 fun CatalogPreview() {
     ShrineComposeTheme {
-        Catalog(SampleItems.filter { it.category == Category.Accessories })
+        Surface {
+            Box(
+                Modifier.fillMaxSize()
+            ) {
+                Catalog(SampleItems.filter { it.category == Category.Accessories })
+            }
+        }
     }
 }
