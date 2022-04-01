@@ -12,24 +12,33 @@ import androidx.compose.ui.Modifier
 @ExperimentalAnimationApi
 @Composable
 fun ShrineApp() {
-    var isBottomSheetHidden by remember { mutableStateOf(false) }
-    var isBottomSheetExpanded by remember { mutableStateOf(false) }
+    var sheetState by remember { mutableStateOf(CartBottomSheetState.Collapsed) }
 
     BoxWithConstraints(
         Modifier.fillMaxSize()
     ) {
         Backdrop(
-            showScrim = isBottomSheetExpanded
-        ) {
-            isBottomSheetHidden = it
+            showScrim = sheetState == CartBottomSheetState.Expanded
+        ) { revealed ->
+            if (revealed) {
+                sheetState = CartBottomSheetState.Hidden
+            } else {
+                sheetState = CartBottomSheetState.Collapsed
+            }
         }
         CartBottomSheet(
             modifier = Modifier.align(Alignment.BottomEnd),
-            hidden = isBottomSheetHidden,
+            sheetState = sheetState,
             maxHeight = maxHeight,
             maxWidth = maxWidth
         ) {
-            isBottomSheetExpanded = it
+            sheetState = it
         }
     }
+}
+
+enum class CartBottomSheetState {
+    Collapsed,
+    Expanded,
+    Hidden,
 }

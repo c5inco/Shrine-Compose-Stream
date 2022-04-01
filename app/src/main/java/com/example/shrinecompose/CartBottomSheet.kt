@@ -257,30 +257,18 @@ fun CollapsedCartPreview() {
     }
 }
 
-enum class CartBottomSheetState {
-    Collapsed,
-    Expanded,
-    Hidden,
-}
-
 @ExperimentalAnimationApi
 @Composable
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
     items: List<ItemData> = SampleItems,
-    hidden: Boolean = false,
     maxHeight: Dp,
     maxWidth: Dp,
-    onExpand: (Boolean) -> Unit = {}
+    sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
+    onSheetStateChange: (CartBottomSheetState) -> Unit = {}
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
     val cartTransition = updateTransition(
-        targetState = when {
-            hidden -> CartBottomSheetState.Hidden
-            expanded -> CartBottomSheetState.Expanded
-            else -> CartBottomSheetState.Collapsed
-        },
+        targetState = sheetState,
         label = "cartTransition"
     )
 
@@ -363,16 +351,14 @@ fun CartBottomSheet(
                     ExpandedCart(
                         items = items.take(10),
                         onCollapse = {
-                            expanded = false
-                            onExpand(expanded)
+                            onSheetStateChange(CartBottomSheetState.Collapsed)
                         }
                     )
                 } else {
                     CollapsedCart(
                         items = items.take(3),
                         onTap = {
-                            expanded = true
-                            onExpand(expanded)
+                            onSheetStateChange(CartBottomSheetState.Expanded)
                         }
                     )
                 }
@@ -399,18 +385,28 @@ fun CartBottomSheetPreview() {
         BoxWithConstraints(
             Modifier.fillMaxSize()
         ) {
-            var isBottomSheetHidden by remember { mutableStateOf(false) }
+            var sheetState by remember { mutableStateOf(CartBottomSheetState.Collapsed) }
 
-            Button(onClick = { isBottomSheetHidden = !isBottomSheetHidden}) {
+            Button(
+                onClick = {
+                    if (sheetState == CartBottomSheetState.Collapsed) {
+                        sheetState = CartBottomSheetState.Hidden
+                    } else {
+                        sheetState = CartBottomSheetState.Collapsed
+                    }
+                }
+            ) {
                 Text("Toggle BottomSheet")
             }
 
             CartBottomSheet(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                hidden = isBottomSheetHidden,
+                sheetState = sheetState,
                 maxHeight = maxHeight,
                 maxWidth = maxWidth
-            )
+            ) {
+                sheetState = it
+            }
         }
     }
 }
