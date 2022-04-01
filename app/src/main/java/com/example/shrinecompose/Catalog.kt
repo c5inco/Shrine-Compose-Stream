@@ -29,15 +29,14 @@ private fun CatalogCard(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box {
+        Box(Modifier.weight(1f)) {
             Image(
                 painter = painterResource(id = data.photoResId),
-                contentDescription = "Image description of photo",
-                alignment = Alignment.TopCenter,
+                contentDescription = "Photo of ${data.title}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = 220.dp)
+                    .fillMaxHeight()
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
@@ -56,9 +55,11 @@ private fun CatalogCard(
         }
         Spacer(Modifier.height(20.dp))
         Text(data.title, style = MaterialTheme.typography.subtitle2)
-        Spacer(Modifier.height(8.dp))
-        Text("\$${data.price}", style = MaterialTheme.typography.body2)
-        Spacer(Modifier.height(8.dp))
+        Text(
+            "\$${data.price}",
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
     }
 }
 
@@ -85,7 +86,7 @@ fun Catalog(
             Column(
                 Modifier
                     .fillMaxHeight()
-                    .padding(horizontal = 16.dp)
+                    .padding(vertical = 48.dp, horizontal = 16.dp)
                     .width((screenWidth * 0.66f).dp),
                 horizontalAlignment = if (!even) Alignment.CenterHorizontally else Alignment.Start,
                 verticalArrangement = Arrangement.Center
@@ -95,19 +96,31 @@ fun Catalog(
                         CatalogCard(
                             modifier = Modifier
                                 .align(Alignment.End)
-                                .fillMaxWidth(0.85f), data = item[1]
+                                .weight(1f)
+                                .fillMaxWidth(0.85f),
+                            data = item[1]
                         )
                         Spacer(Modifier.height(40.dp))
+                        CatalogCard(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(0.85f),
+                            data = item[0]
+                        )
+                    } else {
+                        CatalogCard(
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .fillMaxHeight(0.5f),
+                            data = item[0]
+                        )
                     }
-                    CatalogCard(
-                        modifier = Modifier.fillMaxWidth(0.85f),
-                        data = item[0]
-                    )
                 } else {
                     CatalogCard(
                         modifier = Modifier
                             .padding(top = 240.dp)
-                            .fillMaxWidth(0.8f),
+                            .fillMaxWidth(0.8f)
+                            .fillMaxHeight(0.85f),
                         data = item[0]
                     )
                 }
@@ -138,7 +151,7 @@ fun CatalogPreview() {
             Box(
                 Modifier.fillMaxSize()
             ) {
-                Catalog(SampleItems.filter { it.category == Category.Clothing })
+                Catalog(SampleItems.filter { it.category == Category.Accessories })
             }
         }
     }
