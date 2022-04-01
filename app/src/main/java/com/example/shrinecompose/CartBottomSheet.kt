@@ -207,7 +207,7 @@ private fun CheckoutButton() {
 
 @Composable
 private fun CollapsedCart(
-    items: List<ItemData> = SampleItems.subList(fromIndex = 0, toIndex = 2),
+    items: List<ItemData> = SampleItems.take(3),
     onTap: () -> Unit = {}
 ) {
     Row(
@@ -360,12 +360,12 @@ fun CartBottomSheet(
             ) { targetState ->
                 if (targetState == CartBottomSheetState.Expanded) {
                     ExpandedCart(
-                        items = items,
+                        items = items.take(10),
                         onCollapse = { expanded = false }
                     )
                 } else {
                     CollapsedCart(
-                        items = items.subList(fromIndex = 0, toIndex = 2),
+                        items = items.take(3),
                         onTap = { expanded = true }
                     )
                 }
