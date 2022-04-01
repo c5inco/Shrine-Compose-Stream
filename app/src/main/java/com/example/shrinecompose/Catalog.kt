@@ -78,33 +78,35 @@ fun Catalog(
 
     LazyRow(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(end = 32.dp)
     ) {
         itemsIndexed(transformToWeavedList(items)) { idx, item ->
             val even = idx % 2 == 0
             Column(
                 Modifier
                     .fillMaxHeight()
+                    .padding(horizontal = 16.dp)
                     .width((screenWidth * 0.66f).dp),
                 horizontalAlignment = if (!even) Alignment.CenterHorizontally else Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
                 if (even) {
+                    if (item.getOrNull(1) != null) {
+                        CatalogCard(
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .fillMaxWidth(0.85f), data = item[1]
+                        )
+                        Spacer(Modifier.height(40.dp))
+                    }
                     CatalogCard(
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .fillMaxWidth(0.85f),
+                        modifier = Modifier.fillMaxWidth(0.85f),
                         data = item[0]
                     )
-                    if (item.getOrNull(1) != null) {
-                        Spacer(Modifier.height(32.dp))
-                        CatalogCard(
-                            modifier = Modifier.fillMaxWidth(0.85f), data = item[1]
-                        )
-                    }
                 } else {
                     CatalogCard(
                         modifier = Modifier
+                            .padding(top = 240.dp)
                             .fillMaxWidth(0.8f),
                         data = item[0]
                     )
@@ -136,7 +138,7 @@ fun CatalogPreview() {
             Box(
                 Modifier.fillMaxSize()
             ) {
-                Catalog(SampleItems.filter { it.category == Category.Accessories })
+                Catalog(SampleItems.filter { it.category == Category.Clothing })
             }
         }
     }
