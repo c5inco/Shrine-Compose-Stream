@@ -356,13 +356,9 @@ fun Backdrop(
             )
         },
         frontLayerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
-            ) {
-                Text("This is the content for category: $activeCategory")
-            }
+            Catalog(items = SampleItems.filter {
+                activeCategory == Category.All || it.category == activeCategory
+            })
         },
         backLayerContent = {
             NavigationMenu(
