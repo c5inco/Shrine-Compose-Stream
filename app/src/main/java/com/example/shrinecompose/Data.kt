@@ -23,6 +23,7 @@ data class ItemData(
     val vendor: Vendor,
     val category: Category,
     val photoResId: Int,
+    val isPhotoPortrait: Boolean = false
 )
 
 enum class Vendor {
@@ -236,6 +237,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_21,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 22,
@@ -244,6 +246,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_22,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 23,
@@ -260,6 +263,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_24,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 25,
@@ -276,6 +280,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_26,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 27,
@@ -284,6 +289,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_27,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 28,
@@ -308,6 +314,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_30,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 31,
@@ -324,6 +331,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_32,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 33,
@@ -340,6 +348,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_34,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 35,
@@ -348,6 +357,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_35,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 36,
@@ -356,6 +366,7 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_36,
+        isPhotoPortrait = true
     ),
     ItemData(
         id = 37,
@@ -364,5 +375,6 @@ val SampleItems = listOf(
         vendor = Vendor.Lmbrjk,
         category = Category.Clothing,
         photoResId = R.drawable.photo_37,
+        isPhotoPortrait = true
     ),
 )
