@@ -73,12 +73,13 @@ fun CatalogCardPreview() {
 
 @Composable
 fun Catalog(
+    modifier: Modifier = Modifier,
     items: List<ItemData>
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
     LazyRow(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(end = 32.dp)
     ) {
         itemsIndexed(transformToWeavedList(items)) { idx, item ->
@@ -151,7 +152,7 @@ fun CatalogPreview() {
             Box(
                 Modifier.fillMaxSize()
             ) {
-                Catalog(SampleItems.filter { it.category == Category.Accessories })
+                Catalog(items = SampleItems.filter { it.category == Category.Accessories })
             }
         }
     }

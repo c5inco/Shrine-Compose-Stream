@@ -13,11 +13,14 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ShrineApp() {
     var isBottomSheetHidden by remember { mutableStateOf(false) }
+    var isBottomSheetExpanded by remember { mutableStateOf(false) }
 
     BoxWithConstraints(
         Modifier.fillMaxSize()
     ) {
-        Backdrop {
+        Backdrop(
+            showScrim = isBottomSheetExpanded
+        ) {
             isBottomSheetHidden = it
         }
         CartBottomSheet(
@@ -25,6 +28,8 @@ fun ShrineApp() {
             hidden = isBottomSheetHidden,
             maxHeight = maxHeight,
             maxWidth = maxWidth
-        )
+        ) {
+            isBottomSheetExpanded = it
+        }
     }
 }

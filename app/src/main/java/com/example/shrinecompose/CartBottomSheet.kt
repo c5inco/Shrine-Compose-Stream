@@ -271,6 +271,7 @@ fun CartBottomSheet(
     hidden: Boolean = false,
     maxHeight: Dp,
     maxWidth: Dp,
+    onExpand: (Boolean) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -361,12 +362,18 @@ fun CartBottomSheet(
                 if (targetState == CartBottomSheetState.Expanded) {
                     ExpandedCart(
                         items = items.take(10),
-                        onCollapse = { expanded = false }
+                        onCollapse = {
+                            expanded = false
+                            onExpand(expanded)
+                        }
                     )
                 } else {
                     CollapsedCart(
                         items = items.take(3),
-                        onTap = { expanded = true }
+                        onTap = {
+                            expanded = true
+                            onExpand(expanded)
+                        }
                     )
                 }
             }

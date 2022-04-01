@@ -17,10 +17,7 @@
 package com.example.shrinecompose
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,12 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
+import com.example.shrinecompose.ui.theme.ShrineScrimColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -327,6 +326,7 @@ fun NavigationMenuPreview() {
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop(
+    showScrim: Boolean = false,
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
@@ -356,10 +356,23 @@ fun Backdrop(
             )
         },
         frontLayerContent = {
-            Catalog(items = SampleItems.filter {
-                activeCategory == Category.All || it.category == activeCategory
-            })
+            val scrimAlpha by animateFloatAsState(
+                targetValue = if (showScrim) 0.6f else 0f,
+                animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+            )
+            Catalog(
+                modifier = Modifier.drawWithContent {
+                    drawContent()
+                    drawRect(color = ShrineScrimColor, alpha = scrimAlpha)
+                },
+                items = SampleItems.filter {
+                    activeCategory == Category.All || it.category == activeCategory
+                }
+            )
         },
+        frontLayerShape = MaterialTheme.shapes.large,
+        frontLayerElevation = 16.dp,
+        frontLayerScrimColor = ShrineScrimColor.copy(alpha = 0.6f),
         backLayerContent = {
             NavigationMenu(
                 modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
@@ -373,8 +386,6 @@ fun Backdrop(
                 }
             )
         },
-        frontLayerShape = MaterialTheme.shapes.large,
-        frontLayerElevation = 16.dp
     )
 }
 

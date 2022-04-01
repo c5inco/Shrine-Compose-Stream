@@ -26,6 +26,8 @@ val ShrinePink300 = Color(0xfffff0ea)
 val ShrinePink500 = Color(0xfffbb8ac)
 val ShrinePink900 = Color(0xff442c2e)
 
+val ShrineScrimColor = ShrinePink300
+
 internal val ShrineLightColorPalette = lightColors(
     primary = ShrinePink100,
     primaryVariant = ShrinePink500,
