@@ -67,7 +67,10 @@ private fun CatalogCard(
 @Composable
 fun CatalogCardPreview() {
     ShrineComposeTheme {
-        CatalogCard(data = SampleItems[0])
+        CatalogCard(
+            modifier = Modifier.height(380.dp),
+            data = SampleItems[0]
+        )
     }
 }
 
