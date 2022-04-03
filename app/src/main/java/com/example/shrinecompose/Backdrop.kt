@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -330,9 +331,9 @@ fun Backdrop(
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
-    var backdropRevealed by remember { mutableStateOf(scaffoldState.isRevealed) }
+    var backdropRevealed by rememberSaveable { mutableStateOf(scaffoldState.isRevealed) }
     val scope = rememberCoroutineScope()
-    var activeCategory by remember { mutableStateOf(Category.All) }
+    var activeCategory by rememberSaveable { mutableStateOf(Category.All) }
 
     BackdropScaffold(
         scaffoldState = scaffoldState,
