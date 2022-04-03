@@ -1,6 +1,7 @@
 package com.example.shrinecompose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -13,20 +14,38 @@ import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
 @Composable
 private fun CatalogCard(
     modifier: Modifier = Modifier,
-    data: ItemData
+    data: ItemData,
+    onAdd: (AddCartItemData) -> Unit
 ) {
+    var size = IntSize.Zero
+    var position = Offset.Zero
+
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .onGloballyPositioned {
+                size = it.size
+                position = it.positionInWindow()
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    onAdd(AddCartItemData(data, size, position))
+                })
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(Modifier.weight(1f)) {
@@ -69,7 +88,8 @@ fun CatalogCardPreview() {
     ShrineComposeTheme {
         CatalogCard(
             modifier = Modifier.height(380.dp),
-            data = SampleItems[0]
+            data = SampleItems[0],
+            onAdd = { println(it) }
         )
     }
 }
@@ -77,7 +97,8 @@ fun CatalogCardPreview() {
 @Composable
 fun Catalog(
     modifier: Modifier = Modifier,
-    items: List<ItemData>
+    items: List<ItemData>,
+    onAddCartItem: (AddCartItemData) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
@@ -102,21 +123,24 @@ fun Catalog(
                                 .align(Alignment.End)
                                 .weight(1f)
                                 .fillMaxWidth(0.85f),
-                            data = item[1]
+                            data = item[1],
+                            onAdd = onAddCartItem
                         )
                         Spacer(Modifier.height(40.dp))
                         CatalogCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth(0.85f),
-                            data = item[0]
+                            data = item[0],
+                            onAdd = onAddCartItem
                         )
                     } else {
                         CatalogCard(
                             modifier = Modifier
                                 .fillMaxWidth(0.85f)
                                 .fillMaxHeight(0.5f),
-                            data = item[0]
+                            data = item[0],
+                            onAdd = onAddCartItem
                         )
                     }
                 } else {
@@ -125,7 +149,8 @@ fun Catalog(
                             .padding(top = 240.dp)
                             .fillMaxWidth(0.8f)
                             .fillMaxHeight(0.85f),
-                        data = item[0]
+                        data = item[0],
+                        onAdd = onAddCartItem
                     )
                 }
             }

@@ -11,6 +11,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.IntSize
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -22,14 +24,12 @@ fun ShrineApp() {
         Modifier.fillMaxSize()
     ) {
         Backdrop(
-            showScrim = sheetState == CartBottomSheetState.Expanded
-        ) { revealed ->
-            if (revealed) {
-                sheetState = CartBottomSheetState.Hidden
-            } else {
-                sheetState = CartBottomSheetState.Collapsed
+            showScrim = sheetState == CartBottomSheetState.Expanded,
+            onAddCartItem = { println(it) },
+            onBackdropReveal = { revealed ->
+                sheetState = if (revealed) CartBottomSheetState.Hidden else CartBottomSheetState.Collapsed
             }
-        }
+        )
         CartBottomSheet(
             modifier = Modifier.align(Alignment.BottomEnd),
             sheetState = sheetState,
@@ -46,3 +46,9 @@ enum class CartBottomSheetState {
     Expanded,
     Hidden,
 }
+
+data class AddCartItemData(
+    val data: ItemData,
+    val cardSize: IntSize,
+    val cardOffset: Offset
+)

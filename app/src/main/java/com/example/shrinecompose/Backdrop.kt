@@ -328,6 +328,7 @@ fun NavigationMenuPreview() {
 @Composable
 fun Backdrop(
     showScrim: Boolean = false,
+    onAddCartItem: (AddCartItemData) -> Unit = {},
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
@@ -368,7 +369,8 @@ fun Backdrop(
                 },
                 items = SampleItems.filter {
                     activeCategory == Category.All || it.category == activeCategory
-                }
+                },
+                onAddCartItem = onAddCartItem
             )
         },
         frontLayerShape = MaterialTheme.shapes.large,
