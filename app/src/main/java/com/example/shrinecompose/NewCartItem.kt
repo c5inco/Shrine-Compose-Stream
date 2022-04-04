@@ -54,8 +54,15 @@ fun NewCartItem(
     val addAnimation = updateTransition(
         transitionState = currentState, label = "Add to cart animation"
     )
+    val itemAlpha by addAnimation.animateFloat(
+        transitionSpec = { tween(durationMillis = 300) },
+        label = "Scrim fade"
+    ) {
+        if (it == NewCartItemState.Initial) 0f else 1f
+    }
+
     val itemSize by addAnimation.animateSize(
-        transitionSpec = { tween(durationMillis = 500, delayMillis = 400) },
+        transitionSpec = { tween(durationMillis = 500, delayMillis = 400, easing = FastOutLinearInEasing) },
         label = "Item size"
     ) {
         if (it == NewCartItemState.Initial) {
@@ -66,6 +73,19 @@ fun NewCartItem(
             }
         }
     }
+    val itemCornerSize by addAnimation.animateDp(
+        transitionSpec = { tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing) },
+        label = "Item corner size"
+    ) {
+        if (it == NewCartItemState.Initial) 0.dp else 10.dp
+    }
+    val scrimAlpha by addAnimation.animateFloat(
+        transitionSpec = { tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing) },
+        label = "Scrim fade"
+    ) {
+        if (it == NewCartItemState.Initial) 0.6f else 0f
+    }
+
     val itemOffsetX by addAnimation.animateFloat(
         transitionSpec = { tween(durationMillis = 500, delayMillis = 400) },
         label = "Item offsetX"
@@ -92,28 +112,6 @@ fun NewCartItem(
             }
         }
     }
-    val itemCornerSize by addAnimation.animateDp(
-        transitionSpec = {
-            tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing)
-        },
-        label = "Item corner size"
-    ) {
-        if (it == NewCartItemState.Initial) 0.dp else 10.dp
-    }
-    val itemAlpha by addAnimation.animateFloat(
-        transitionSpec = { tween(durationMillis = 300) },
-        label = "Scrim fade"
-    ) {
-        if (it == NewCartItemState.Initial) 0f else 1f
-    }
-    val scrimAlpha by addAnimation.animateFloat(
-        transitionSpec = {
-            tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing)
-        },
-        label = "Scrim fade"
-    ) {
-        if (it == NewCartItemState.Initial) 0.6f else 0f
-    }
     val itemElevation by addAnimation.animateDp(
         transitionSpec = { tween(durationMillis = 500, delayMillis = 400) },
         label = "Scrim fade"
@@ -123,9 +121,7 @@ fun NewCartItem(
 
     Box(
         modifier = modifier
-            .offset {
-                IntOffset(itemOffsetX.toInt(), itemOffsetY.toInt())
-            }
+            .offset { IntOffset(itemOffsetX.toInt(), itemOffsetY.toInt()) }
             .graphicsLayer { alpha = itemAlpha }
             .clickable { onTap() }
     ) {
