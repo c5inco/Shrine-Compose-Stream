@@ -18,7 +18,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,20 +30,19 @@ import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 private fun CatalogCard(
     modifier: Modifier = Modifier,
     data: ItemData,
-    onAdd: (AddCartItemData) -> Unit
+    onAdd: (NewCartItemData) -> Unit
 ) {
-    var size = IntSize.Zero
+    var imageSize = IntSize.Zero
     var position = Offset.Zero
 
     Column(
         modifier = modifier
             .onGloballyPositioned {
-                size = it.size
-                position = it.positionInWindow()
+                position = it.positionInRoot()
             }
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    onAdd(AddCartItemData(data, size, position))
+                    onAdd(NewCartItemData(data, imageSize, position))
                 })
             },
         horizontalAlignment = Alignment.CenterHorizontally
@@ -56,6 +55,9 @@ private fun CatalogCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
+                    .onGloballyPositioned {
+                        imageSize = it.size
+                    }
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
@@ -98,7 +100,7 @@ fun CatalogCardPreview() {
 fun Catalog(
     modifier: Modifier = Modifier,
     items: List<ItemData>,
-    onAddCartItem: (AddCartItemData) -> Unit = {}
+    onAddCartItem: (NewCartItemData) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
