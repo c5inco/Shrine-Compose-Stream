@@ -261,7 +261,7 @@ fun CollapsedCartPreview() {
 @Composable
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
-    items: List<ItemData> = SampleItems,
+    items: List<ItemData> = SampleItems.take(3),
     maxHeight: Dp,
     maxWidth: Dp,
     sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
@@ -356,14 +356,14 @@ fun CartBottomSheet(
             ) { targetState ->
                 if (targetState == CartBottomSheetState.Expanded) {
                     ExpandedCart(
-                        items = items.take(10),
+                        items = items,
                         onCollapse = {
                             onSheetStateChange(CartBottomSheetState.Collapsed)
                         }
                     )
                 } else {
                     CollapsedCart(
-                        items = items.take(3),
+                        items = items,
                         onTap = {
                             onSheetStateChange(CartBottomSheetState.Expanded)
                         }
