@@ -11,7 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -32,8 +32,8 @@ private fun CatalogCard(
     data: ItemData,
     onAdd: (NewCartItemData) -> Unit
 ) {
-    var imageSize = IntSize.Zero
-    var position = Offset.Zero
+    var imageSize by remember { mutableStateOf(IntSize.Zero) }
+    var position by remember { mutableStateOf(Offset.Zero) }
 
     Column(
         modifier = modifier
@@ -108,7 +108,10 @@ fun Catalog(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(end = 32.dp)
     ) {
-        itemsIndexed(transformToWeavedList(items)) { idx, item ->
+        itemsIndexed(
+            items = transformToWeavedList(items),
+            key = { _, item -> item[0].id }
+        ) { idx, item ->
             val even = idx % 2 == 0
             Column(
                 Modifier
