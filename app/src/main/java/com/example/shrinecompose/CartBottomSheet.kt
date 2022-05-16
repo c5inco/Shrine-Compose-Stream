@@ -233,6 +233,17 @@ private fun CollapsedCart(
         items.take(3).forEach { item ->
             CollapsedCartItem(data = item)
         }
+        if (items.size > 3) {
+            Box(
+                Modifier.size(width = 32.dp, height = 40.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "+${items.size - 3}",
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            }
+        }
     }
 }
 
@@ -265,7 +276,7 @@ fun CollapsedCartPreview() {
 @Composable
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
-    items: List<ItemData> = SampleItems.take(3),
+    items: List<ItemData> = SampleItems.take(14),
     maxHeight: Dp,
     maxWidth: Dp,
     sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
@@ -302,7 +313,8 @@ fun CartBottomSheet(
             CartBottomSheetState.Expanded -> maxWidth
             else -> {
                 val size = min(3, items.size)
-                val width = 24 + 40 * (size + 1) + 16 * size + 16
+                var width = 24 + 40 * (size + 1) + 16 * size + 16
+                if (items.size > 3) width += 32 + 16
                 width.dp
             }
         }

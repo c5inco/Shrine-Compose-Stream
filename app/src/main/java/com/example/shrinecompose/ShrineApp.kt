@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ShrineApp() {
     var sheetState by rememberSaveable { mutableStateOf(CartBottomSheetState.Collapsed) }
-    val cartItems = remember { mutableStateListOf(*SampleItems.take(4).toTypedArray()) }
+    val cartItems = remember { mutableStateListOf(*SampleItems.take(2).toTypedArray()) }
     var firstAddCartItem by remember { mutableStateOf<FirstAddCartItemData?>(null) }
 
     BoxWithConstraints(
