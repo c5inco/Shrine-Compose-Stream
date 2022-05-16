@@ -290,32 +290,25 @@ fun CartBottomSheet(
 
     val cartXOffset by cartTransition.animateDp(
         label = "cartXOffset",
-        transitionSpec = { tween(durationMillis = 450) }
-    ) {
-        when (it) {
-            CartBottomSheetState.Hidden -> maxWidth
-            else -> 0.dp
-        }
-    }
-
-    val cartWidth by cartTransition.animateDp(
-        label = "cartWidth",
         transitionSpec = {
             when {
                 CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
                     tween(durationMillis = 433, delayMillis = 67)
-                else ->
+                CartBottomSheetState.Collapsed isTransitioningTo CartBottomSheetState.Expanded ->
                     tween(durationMillis = 150)
+                else ->
+                    tween(durationMillis = 450)
             }
         }
     ) {
         when (it) {
-            CartBottomSheetState.Expanded -> maxWidth
+            CartBottomSheetState.Expanded -> 0.dp
+            CartBottomSheetState.Hidden -> maxWidth
             else -> {
                 val size = min(3, items.size)
                 var width = 24 + 40 * (size + 1) + 16 * size + 16
                 if (items.size > 3) width += 32 + 16
-                width.dp
+                maxWidth - width.dp
             }
         }
     }
@@ -350,7 +343,7 @@ fun CartBottomSheet(
 
     Surface(
         modifier = modifier
-            .width(cartWidth)
+            .width(maxWidth)
             .height(cartHeight)
             .offset(x = cartXOffset),
         shape = CutCornerShape(topStart = cornerSize),
