@@ -328,7 +328,7 @@ fun NavigationMenuPreview() {
 @Composable
 fun Backdrop(
     showScrim: Boolean = false,
-    onAddCartItem: (NewCartItemData) -> Unit = {},
+    onAddCartItem: (FirstAddCartItemData) -> Unit = {},
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)

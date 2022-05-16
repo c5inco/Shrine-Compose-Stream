@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 fun ShrineApp() {
     var sheetState by rememberSaveable { mutableStateOf(CartBottomSheetState.Collapsed) }
     val cartItems = remember { mutableStateListOf(*SampleItems.take(4).toTypedArray()) }
-    val newCartItem = remember { mutableStateOf<NewCartItemData?>(null) }
+    var firstAddCartItem by remember { mutableStateOf<FirstAddCartItemData?>(null) }
 
     BoxWithConstraints(
         Modifier.fillMaxSize()
@@ -23,8 +23,8 @@ fun ShrineApp() {
         Backdrop(
             showScrim = sheetState == CartBottomSheetState.Expanded,
             onAddCartItem = {
+                if (cartItems.isEmpty()) firstAddCartItem = it
                 cartItems.add(it.data)
-                newCartItem.value = it
             },
             onBackdropReveal = { revealed ->
                 sheetState = if (revealed) CartBottomSheetState.Hidden else CartBottomSheetState.Collapsed
@@ -38,17 +38,18 @@ fun ShrineApp() {
             maxWidth = maxWidth,
             onRemoveItemFromCart = {
                 cartItems.remove(it)
+                if (cartItems.isEmpty()) firstAddCartItem = null
             },
             onSheetStateChange = {
                 sheetState = it
             }
         )
-        if (newCartItem.value != null) {
-            NewCartItem(
-                data = newCartItem.value!!
+        if (firstAddCartItem != null) {
+            FirstAddCartItem(
+                data = firstAddCartItem!!
             ) {
                 // Temporary to dismiss
-                newCartItem.value = null
+                firstAddCartItem = null
             }
         }
     }

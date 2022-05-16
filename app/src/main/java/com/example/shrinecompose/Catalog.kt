@@ -30,7 +30,7 @@ import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 private fun CatalogCard(
     modifier: Modifier = Modifier,
     data: ItemData,
-    onAdd: (NewCartItemData) -> Unit
+    onAdd: (FirstAddCartItemData) -> Unit
 ) {
     var imageSize by remember { mutableStateOf(IntSize.Zero) }
     var position by remember { mutableStateOf(Offset.Zero) }
@@ -42,7 +42,7 @@ private fun CatalogCard(
             }
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    onAdd(NewCartItemData(data, imageSize, position))
+                    onAdd(FirstAddCartItemData(data, imageSize, position))
                 })
             },
         horizontalAlignment = Alignment.CenterHorizontally
@@ -100,7 +100,7 @@ fun CatalogCardPreview() {
 fun Catalog(
     modifier: Modifier = Modifier,
     items: List<ItemData>,
-    onAddCartItem: (NewCartItemData) -> Unit = {}
+    onAddCartItem: (FirstAddCartItemData) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 

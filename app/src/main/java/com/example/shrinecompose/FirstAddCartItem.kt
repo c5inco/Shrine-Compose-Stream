@@ -27,29 +27,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.shrinecompose.ui.theme.ShrineScrimColor
 
-enum class NewCartItemState {
+enum class FirstAddCartItemState {
     Initial,
     Added
 }
 
-data class NewCartItemData(
+data class FirstAddCartItemData(
     val data: ItemData,
     val imageSize: IntSize,
     val cardOffset: Offset
 )
 
 @Composable
-fun NewCartItem(
+fun FirstAddCartItem(
     modifier: Modifier = Modifier,
-    data: NewCartItemData,
+    data: FirstAddCartItemData,
     onTap: () -> Unit
 ) {
     val (itemData, imageSize, cardOffset) = data
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val screenHeight = LocalConfiguration.current.screenHeightDp
 
-    val currentState = remember { MutableTransitionState(NewCartItemState.Initial) }
-    currentState.targetState = NewCartItemState.Added
+    val currentState = remember { MutableTransitionState(FirstAddCartItemState.Initial) }
+    currentState.targetState = FirstAddCartItemState.Added
 
     val addAnimation = updateTransition(
         transitionState = currentState, label = "Add to cart animation"
@@ -58,14 +58,14 @@ fun NewCartItem(
         transitionSpec = { tween(durationMillis = 300) },
         label = "Scrim fade"
     ) {
-        if (it == NewCartItemState.Initial) 0f else 1f
+        if (it == FirstAddCartItemState.Initial) 0f else 1f
     }
 
     val itemSize by addAnimation.animateSize(
         transitionSpec = { tween(durationMillis = 500, delayMillis = 400, easing = FastOutLinearInEasing) },
         label = "Item size"
     ) {
-        if (it == NewCartItemState.Initial) {
+        if (it == FirstAddCartItemState.Initial) {
             imageSize.toSize()
         } else {
             with (LocalDensity.current) {
@@ -77,20 +77,20 @@ fun NewCartItem(
         transitionSpec = { tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing) },
         label = "Item corner size"
     ) {
-        if (it == NewCartItemState.Initial) 0.dp else 10.dp
+        if (it == FirstAddCartItemState.Initial) 0.dp else 10.dp
     }
     val scrimAlpha by addAnimation.animateFloat(
         transitionSpec = { tween(durationMillis = 1000, delayMillis = 400, easing = LinearOutSlowInEasing) },
         label = "Scrim fade"
     ) {
-        if (it == NewCartItemState.Initial) 0.6f else 0f
+        if (it == FirstAddCartItemState.Initial) 0.6f else 0f
     }
 
     val itemOffsetX by addAnimation.animateFloat(
         transitionSpec = { tween(durationMillis = 500, delayMillis = 400) },
         label = "Item offsetX"
     ) {
-        if (it == NewCartItemState.Initial) {
+        if (it == FirstAddCartItemState.Initial) {
             cardOffset.x
         } else {
             with (LocalDensity.current) {
@@ -104,7 +104,7 @@ fun NewCartItem(
         },
         label = "Item offsetY"
     ) {
-        if (it == NewCartItemState.Initial) {
+        if (it == FirstAddCartItemState.Initial) {
             cardOffset.y
         } else {
             with (LocalDensity.current) {
@@ -116,7 +116,7 @@ fun NewCartItem(
         transitionSpec = { tween(durationMillis = 500, delayMillis = 400) },
         label = "Scrim fade"
     ) {
-        if (it == NewCartItemState.Initial) 16.dp else 0.dp
+        if (it == FirstAddCartItemState.Initial) 16.dp else 0.dp
     }
 
     Box(
