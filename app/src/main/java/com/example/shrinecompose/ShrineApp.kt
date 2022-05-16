@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ShrineApp() {
     var sheetState by rememberSaveable { mutableStateOf(CartBottomSheetState.Collapsed) }
+    val cartItems = remember { mutableStateListOf(*SampleItems.take(4).toTypedArray()) }
     val newCartItem = remember { mutableStateOf<NewCartItemData?>(null) }
 
     BoxWithConstraints(
@@ -22,6 +23,7 @@ fun ShrineApp() {
         Backdrop(
             showScrim = sheetState == CartBottomSheetState.Expanded,
             onAddCartItem = {
+                cartItems.add(it.data)
                 newCartItem.value = it
             },
             onBackdropReveal = { revealed ->
@@ -30,12 +32,17 @@ fun ShrineApp() {
         )
         CartBottomSheet(
             modifier = Modifier.align(Alignment.BottomEnd),
+            items = cartItems,
             sheetState = sheetState,
             maxHeight = maxHeight,
-            maxWidth = maxWidth
-        ) {
-            sheetState = it
-        }
+            maxWidth = maxWidth,
+            onRemoveItemFromCart = {
+                cartItems.remove(it)
+            },
+            onSheetStateChange = {
+                sheetState = it
+            }
+        )
         if (newCartItem.value != null) {
             NewCartItem(
                 data = newCartItem.value!!

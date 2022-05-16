@@ -82,14 +82,15 @@ fun CartHeaderPreview() {
 
 @Composable
 private fun CartItem(
-    item: ItemData
+    item: ItemData,
+    onRemoveAction: () -> Unit = {}
 ) {
     Row(
         Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = {},
+            onClick = { onRemoveAction() },
             Modifier.padding(horizontal = 4.dp)
         ) {
             Icon(
@@ -151,6 +152,7 @@ fun CartItemPreview() {
 @Composable
 fun ExpandedCart(
     items: List<ItemData> = SampleItems,
+    onRemoveItem: (ItemData) -> Unit = {},
     onCollapse: () -> Unit = {}
 ) {
     Surface(
@@ -173,7 +175,9 @@ fun ExpandedCart(
                     .padding(bottom = 64.dp)
             ) {
                 items.forEach { item ->
-                    CartItem(item)
+                    CartItem(item) {
+                        onRemoveItem(item)
+                    }
                 }
             }
         }
@@ -226,7 +230,7 @@ private fun CollapsedCart(
                 contentDescription = "Shopping cart icon",
             )
         }
-        items.forEach { item ->
+        items.take(3).forEach { item ->
             CollapsedCartItem(data = item)
         }
     }
@@ -265,6 +269,7 @@ fun CartBottomSheet(
     maxHeight: Dp,
     maxWidth: Dp,
     sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
+    onRemoveItemFromCart: (ItemData) -> Unit = {},
     onSheetStateChange: (CartBottomSheetState) -> Unit = {}
 ) {
     val cartTransition = updateTransition(
@@ -357,6 +362,9 @@ fun CartBottomSheet(
                 if (targetState == CartBottomSheetState.Expanded) {
                     ExpandedCart(
                         items = items,
+                        onRemoveItem = {
+                            onRemoveItemFromCart(it)
+                        },
                         onCollapse = {
                             onSheetStateChange(CartBottomSheetState.Collapsed)
                         }
