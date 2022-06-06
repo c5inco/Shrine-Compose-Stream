@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -212,7 +213,7 @@ private fun CheckoutButton() {
 
 @Composable
 private fun CollapsedCart(
-    items: List<ItemData> = SampleItems.take(3),
+    items: List<ItemData> = SampleItems.take(6),
     onTap: () -> Unit = {}
 ) {
     Row(
@@ -242,6 +243,7 @@ private fun CollapsedCart(
                 Text(
                     "+${items.size - 3}",
                     style = MaterialTheme.typography.subtitle2,
+                    textAlign = TextAlign.Center
                 )
             }
         }

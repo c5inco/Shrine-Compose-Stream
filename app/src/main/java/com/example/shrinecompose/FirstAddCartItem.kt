@@ -2,7 +2,6 @@ package com.example.shrinecompose
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -42,17 +41,21 @@ data class FirstAddCartItemData(
 fun FirstAddCartItem(
     modifier: Modifier = Modifier,
     data: FirstAddCartItemData,
-    onTap: () -> Unit
+    onAddTransitionEnd: () -> Unit
 ) {
     val (itemData, imageSize, cardOffset) = data
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val screenHeight = LocalConfiguration.current.screenHeightDp
 
-    val currentState = remember { MutableTransitionState(FirstAddCartItemState.Initial) }
-    currentState.targetState = FirstAddCartItemState.Added
+    val transitionState = remember { MutableTransitionState(FirstAddCartItemState.Initial) }
+    transitionState.targetState = FirstAddCartItemState.Added
+
+    if (transitionState.currentState == FirstAddCartItemState.Added && transitionState.isIdle) {
+        onAddTransitionEnd()
+    }
 
     val addAnimation = updateTransition(
-        transitionState = currentState, label = "Add to cart animation"
+        transitionState = transitionState, label = "Add to cart animation"
     )
     val itemAlpha by addAnimation.animateFloat(
         transitionSpec = { tween(durationMillis = 300) },
@@ -123,7 +126,6 @@ fun FirstAddCartItem(
         modifier = modifier
             .offset { IntOffset(itemOffsetX.toInt(), itemOffsetY.toInt()) }
             .graphicsLayer { alpha = itemAlpha }
-            .clickable { onTap() }
     ) {
         Image(
             painter = painterResource(id = itemData.photoResId),
