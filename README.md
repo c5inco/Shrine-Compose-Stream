@@ -1,7 +1,16 @@
-![Shrine stickersheet from Material Design website](https://lh3.googleusercontent.com/b84vzNg1_NOFTBQkVpa-lMy4VX-wyIZGET8nbV7MFgcIsnJa8AMojLZXgvM8QFkuSPlCpxr831Z2xdbNbBIR7hsKzIuzgxpY7Rhzcw=w1024-v0)
-
 # Shrine Compose livestream
-Repo for building Shrine with Jetpack Compose, on Material Design Live
+Repo for building Shrine with Jetpack Compose, on Material Design Live. 
+
+Shrine is an e-commerce Material Design case study: https://material.io/design/material-studies/shrine.html. This is a prototype, focused on translating the design intent, intended for teaching designers and those new to Jetpack Compose on how to build UI.
+
+Progress:
+
+- [x] Backdrop
+- [x] Inventory
+- [x] Cart
+- [ ] Details
+
+![Shrine stickersheet from Material Design website](https://lh3.googleusercontent.com/b84vzNg1_NOFTBQkVpa-lMy4VX-wyIZGET8nbV7MFgcIsnJa8AMojLZXgvM8QFkuSPlCpxr831Z2xdbNbBIR7hsKzIuzgxpY7Rhzcw=w1024-v0)
 
 ## 🧑‍💻 Development setup
 
