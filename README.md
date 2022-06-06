@@ -1,3 +1,5 @@
+![Shrine stickersheet from Material Design website](https://lh3.googleusercontent.com/b84vzNg1_NOFTBQkVpa-lMy4VX-wyIZGET8nbV7MFgcIsnJa8AMojLZXgvM8QFkuSPlCpxr831Z2xdbNbBIR7hsKzIuzgxpY7Rhzcw=w1024-v0)
+
 # Shrine Compose livestream
 Repo for building Shrine with Jetpack Compose, on Material Design Live
 
