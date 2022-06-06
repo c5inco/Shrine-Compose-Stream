@@ -25,7 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
