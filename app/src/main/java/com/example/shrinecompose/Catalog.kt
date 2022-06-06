@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
@@ -71,7 +72,7 @@ private fun CatalogCard(
                 contentDescription = "Vendor logo",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .offset(y = 12.dp)
+                    .offset { IntOffset(0, y = 12.dp.roundToPx()) }
             )
         }
         Spacer(Modifier.height(20.dp))

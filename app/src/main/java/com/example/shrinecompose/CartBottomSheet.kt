@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 import kotlin.math.min
@@ -345,7 +346,7 @@ fun CartBottomSheet(
         modifier = modifier
             .width(maxWidth)
             .height(cartHeight)
-            .offset(x = cartXOffset),
+            .offset { IntOffset(cartXOffset.roundToPx(), 0) },
         shape = CutCornerShape(topStart = cornerSize),
         color = MaterialTheme.colors.secondary,
         elevation = 8.dp
