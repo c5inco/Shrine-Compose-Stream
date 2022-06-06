@@ -51,7 +51,7 @@ Progress:
   - State
     - Show selection of nav menu item
 
-### Episode 1 ([stream]([https://www.youtube.com/watch?v=T9uMu8nIVM0](https://www.youtube.com/watch?v=6-1l2nrJpqI)))
+### Episode 1 ([stream](https://www.youtube.com/watch?v=6-1l2nrJpqI))
 - Compose basics on building UI
 - Material Theming
   - Color, shape, and typography
