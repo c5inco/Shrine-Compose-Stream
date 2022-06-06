@@ -21,14 +21,14 @@ Progress:
 
 ## 📚 Topics covered
 
-### Episode 4
+### Episode 4 ([stream](https://www.youtube.com/watch?v=sNxRwTVGuOI))
 - Creating the expanding Cart [BottomSheet](https://material.io/components/sheets-bottom#expanding-bottom-sheet)
   - Build the collapsed version of Cart
   - Expanded <-> collapsed transition of Cart
 - ~~Add animated Checkout button to expanded cart~~
 - Hide/show Cart bottom sheet in coordination with Backdrop
 
-### Episode 3
+### Episode 3 ([stream](https://www.youtube.com/watch?v=nCPEuWCQlWk))
 - Intro to animation
   - APIs
     - updateTransition
@@ -40,7 +40,7 @@ Progress:
   - TopAppBar Text <-> Search field
   - Navigation menu items
 
-### Episode 2
+### Episode 2 ([stream](https://www.youtube.com/watch?v=T9uMu8nIVM0))
 - Intro to state management
 - Slot-based approach in Compose
 - Creating the navigation [Backdrop](https://developer.android.com/jetpack/compose/layouts/material#backdrop) menu
@@ -51,7 +51,7 @@ Progress:
   - State
     - Show selection of nav menu item
 
-### Episode 1
+### Episode 1 ([stream]([https://www.youtube.com/watch?v=T9uMu8nIVM0](https://www.youtube.com/watch?v=6-1l2nrJpqI)))
 - Compose basics on building UI
 - Material Theming
   - Color, shape, and typography
@@ -64,10 +64,6 @@ Progress:
 
 ## 🧰 Helpful resources
 
-- Previous episodes
-  - [Episode 3](https://www.youtube.com/watch?v=nCPEuWCQlWk) 
-  - [Episode 2](https://www.youtube.com/watch?v=T9uMu8nIVM0)
-  - [Episode 1](https://www.youtube.com/watch?v=6-1l2nrJpqI)
 - Compose Material
   - [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
   - [Compose Material Components layout guide](https://developer.android.com/jetpack/compose/layouts/material)
