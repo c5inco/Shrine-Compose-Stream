@@ -25,6 +25,9 @@ fun ShrineApp() {
         Modifier.fillMaxSize()
     ) {
         Backdrop(
+            onAddItemToCart = {
+                cartItems.add(it)
+            },
             onBackdropReveal = { revealed ->
                 sheetState = if (revealed) CartBottomSheetState.Hidden else CartBottomSheetState.Collapsed
             }

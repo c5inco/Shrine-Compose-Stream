@@ -41,7 +41,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -366,6 +365,7 @@ fun NavigationMenuPreview() {
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop(
+    onAddItemToCart: (ItemData) -> Unit = {},
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
@@ -395,13 +395,12 @@ fun Backdrop(
             )
         },
         frontLayerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
-            ) {
-                Text("This is the content for category: $activeCategory")
-            }
+            Catalog(
+                items = SampleItems.filter {
+                    activeCategory == Category.All || it.category == activeCategory
+                },
+                onAddItemToCart = onAddItemToCart
+            )
         },
         frontLayerShape = MaterialTheme.shapes.large,
         frontLayerElevation = 16.dp,
