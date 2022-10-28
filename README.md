@@ -6,20 +6,26 @@ Shrine is an e-commerce Material Design case study: https://material.io/design/m
 Progress:
 
 - [x] Backdrop
-- [x] Inventory
 - [x] Cart
+- [x] Catalog
 - [ ] Details
 
 ![Shrine stickersheet from Material Design website](https://lh3.googleusercontent.com/b84vzNg1_NOFTBQkVpa-lMy4VX-wyIZGET8nbV7MFgcIsnJa8AMojLZXgvM8QFkuSPlCpxr831Z2xdbNbBIR7hsKzIuzgxpY7Rhzcw=w1024-v0)
 
 ## 🧑‍💻 Development setup
 
-- [Android Studio Dolphin 2021.3.1 Canary 3](https://developer.android.com/studio) or newer
-- [Compose 1.1.0](https://developer.android.com/jetpack/compose)
+- [Android Studio Dolphin 2021.3.1](https://developer.android.com/studio) or newer
+- [Compose 1.3.0](https://developer.android.com/jetpack/compose)
 
 **Note:** Above Studio version required only for specific Animation Inspector features, otherwise Bumblebee 2021.1.1 should still work at a minimum to build and deploy the app
 
 ## 📚 Topics covered
+
+### Episode 5
+- Adding the Catalog to the Backdrop front layer
+  - Create the custom Card
+  - Build a weaved list with LazyRow
+- Hook up interaction to add items to the cart
 
 ### Episode 4 ([stream](https://www.youtube.com/watch?v=sNxRwTVGuOI))
 - Creating the expanding Cart [BottomSheet](https://material.io/components/sheets-bottom#expanding-bottom-sheet)
