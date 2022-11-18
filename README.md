@@ -15,13 +15,13 @@ Progress:
 ## 🧑‍💻 Development setup
 
 - [Android Studio Dolphin 2021.3.1](https://developer.android.com/studio) or newer
-- [Compose 1.3.0](https://developer.android.com/jetpack/compose)
+- [Compose 1.1.1+](https://developer.android.com/jetpack/compose)
 
 **Note:** Above Studio version required only for specific Animation Inspector features, otherwise Bumblebee 2021.1.1 should still work at a minimum to build and deploy the app
 
 ## 📚 Topics covered
 
-### Episode 5
+### Episode 5 ([stream](https://www.youtube.com/watch?v=zfCgp-r1J1s))
 - Adding the Catalog to the Backdrop front layer
   - Create the custom Card
   - Build a weaved list with LazyRow
@@ -70,6 +70,7 @@ Progress:
 
 ## 🧰 Helpful resources
 
+- [Full YouTube Playlist of series and highlights](https://www.youtube.com/playlist?list=PLsoLz-E4Os4UMUXAuhpXaQzN4d8B9mQqV)
 - Compose Material
   - [Compose Material reference docs](https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary)
   - [Compose Material Components layout guide](https://developer.android.com/jetpack/compose/layouts/material)
