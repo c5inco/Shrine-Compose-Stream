@@ -25,6 +25,7 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
@@ -32,6 +33,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -39,6 +41,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,10 +51,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -65,10 +68,13 @@ import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -121,11 +127,12 @@ fun CartHeaderPreview() {
 
 @Composable
 private fun CartItem(
+    modifier: Modifier = Modifier,
     item: ItemData,
     onRemoveAction: () -> Unit = {}
 ) {
     Row(
-        Modifier.fillMaxWidth(),
+        modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
@@ -183,40 +190,49 @@ private fun CartItem(
 fun CartItemPreview() {
     ShrineComposeTheme {
         Surface(color = MaterialTheme.colors.secondary) {
-            CartItem(SampleItems[0])
+            CartItem(item = SampleItems[0])
         }
     }
 }
 
+data class ExpandedCartItem(
+    val idx: Int,
+    val visible: MutableTransitionState<Boolean> = MutableTransitionState(true),
+    val data: ItemData
+)
+
 @Composable
 fun ExpandedCart(
-    items: List<ItemData> = SampleItems,
-    onRemoveItem: (ItemData) -> Unit = {},
+    cartItems: List<ExpandedCartItem>,
+    onRemoveItem: (ExpandedCartItem) -> Unit = {},
     onCollapse: () -> Unit = {}
 ) {
     Surface(
         color = MaterialTheme.colors.secondary
     ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 64.dp)
         ) {
-            CartHeader(
-                cartSize = items.size,
-                onCollapse = onCollapse
-            )
-
-            // Items
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 64.dp)
-            ) {
-                items.forEach { item ->
-                    CartItem(item) {
-                        onRemoveItem(item)
-                    }
+            item {
+                CartHeader(
+                    cartSize = cartItems.size,
+                    onCollapse = onCollapse
+                )
+            }
+            itemsIndexed(
+                items = cartItems,
+                key = { idx, item -> "$idx-${item.data.id}" }
+            ) { idx, it ->
+                AnimatedVisibility(
+                    visibleState = it.visible,
+                    exit = fadeOut() + slideOut(targetOffset = { IntOffset(x = -it.width / 2, y = 0) })
+                ) {
+                    CartItem(
+                        item = it.data,
+                        onRemoveAction = { onRemoveItem(it) }
+                    )
                 }
             }
         }
@@ -227,7 +243,7 @@ fun ExpandedCart(
 @Composable
 fun ExpandedCartPreview() {
     ShrineComposeTheme {
-        ExpandedCart()
+        ExpandedCart(SampleItems.mapIndexed { idx, it -> ExpandedCartItem(idx = idx, data = it) })
     }
 }
 
@@ -320,9 +336,27 @@ fun CartBottomSheet(
     maxHeight: Dp,
     maxWidth: Dp,
     sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
-    onRemoveItemFromCart: (ItemData) -> Unit = {},
+    onRemoveItemFromCart: (Int) -> Unit = {},
     onSheetStateChange: (CartBottomSheetState) -> Unit = {}
 ) {
+    val expandedCartItems by remember(items) {
+        derivedStateOf {
+            items.mapIndexed { idx, it -> ExpandedCartItem(idx = idx, data = it) }
+        }
+    }
+
+    LaunchedEffect(expandedCartItems) {
+        snapshotFlow {
+            expandedCartItems.firstOrNull {
+                it.visible.isIdle && !it.visible.targetState
+            }
+        }.collect {
+            if (it != null) {
+                onRemoveItemFromCart(it.idx)
+            }
+        }
+    }
+
     val cartTransition = updateTransition(
         targetState = sheetState,
         label = "cartTransition"
@@ -406,9 +440,9 @@ fun CartBottomSheet(
             ) { targetState ->
                 if (targetState == CartBottomSheetState.Expanded) {
                     ExpandedCart(
-                        items = items,
+                        cartItems = expandedCartItems,
                         onRemoveItem = {
-                            onRemoveItemFromCart(it)
+                            it.visible.targetState = false
                         },
                         onCollapse = {
                             onSheetStateChange(CartBottomSheetState.Collapsed)

@@ -58,7 +58,7 @@ fun ShrineApp() {
             maxHeight = maxHeight,
             maxWidth = maxWidth,
             onRemoveItemFromCart = {
-                cartItems.remove(it)
+                cartItems.removeAt(it)
                 if (cartItems.isEmpty()) firstAddCartItem = null
             },
             onSheetStateChange = {
