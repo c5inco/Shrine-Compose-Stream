@@ -401,7 +401,8 @@ fun Backdrop(
         frontLayerContent = {
             val scrimAlpha by animateFloatAsState(
                 targetValue = if (showScrim) 0.6f else 0f,
-                animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+                animationSpec = tween(durationMillis = 500, easing = LinearEasing),
+                label = "scrimAlpha"
             )
             Catalog(
                 modifier = Modifier.drawWithContent {
