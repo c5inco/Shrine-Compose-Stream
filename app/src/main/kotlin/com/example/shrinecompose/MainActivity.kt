@@ -45,5 +45,6 @@ class MainActivity : ComponentActivity() {
 fun AppPreview() {
     ShrineComposeTheme {
         ShrineApp()
+
     }
 }
