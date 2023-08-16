@@ -17,7 +17,7 @@
 package com.example.shrinecompose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,22 +39,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
@@ -62,20 +53,12 @@ import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 private fun CatalogCard(
     modifier: Modifier = Modifier,
     data: ItemData,
-    onAdd: (FirstAddCartItemData) -> Unit
+    onAdd: (ItemData) -> Unit
 ) {
-    var imageSize by remember { mutableStateOf(IntSize.Zero) }
-    var position by remember { mutableStateOf(Offset.Zero) }
-
     Column(
         modifier = modifier
-            .onGloballyPositioned {
-                position = it.positionInRoot()
-            }
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    onAdd(FirstAddCartItemData(data, imageSize, position))
-                })
+            .clickable {
+               onAdd(data)
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -87,9 +70,6 @@ private fun CatalogCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .onGloballyPositioned {
-                        imageSize = it.size
-                    }
             )
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
@@ -132,7 +112,7 @@ fun CatalogCardPreview() {
 fun Catalog(
     modifier: Modifier = Modifier,
     items: List<ItemData>,
-    onAddCartItem: (FirstAddCartItemData) -> Unit = {}
+    onAddCartItem: (ItemData) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
