@@ -34,7 +34,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -224,7 +224,7 @@ fun ExpandedCart(
             itemsIndexed(
                 items = cartItems,
                 key = { idx, item -> "$idx-${item.data.id}" }
-            ) { idx, it ->
+            ) { _, it ->
                 AnimatedVisibility(
                     visibleState = it.visible,
                     exit = fadeOut() + slideOut(targetOffset = { IntOffset(x = -it.width / 2, y = 0) })
@@ -328,7 +328,7 @@ fun CollapsedCartPreview() {
     }
 }
 
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
@@ -429,12 +429,12 @@ fun CartBottomSheet(
                 transitionSpec = {
                     when {
                         CartBottomSheetState.Expanded isTransitioningTo CartBottomSheetState.Collapsed ->
-                            fadeIn(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)) with
+                            fadeIn(animationSpec = tween(durationMillis = 117, delayMillis = 117, easing = LinearEasing)) togetherWith
                                 fadeOut(animationSpec = tween(durationMillis = 117, easing = LinearEasing))
                         CartBottomSheetState.Collapsed isTransitioningTo CartBottomSheetState.Expanded ->
-                            fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)) with
+                            fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)) togetherWith
                                 fadeOut(animationSpec = tween(durationMillis = 150, easing = LinearEasing))
-                        else -> EnterTransition.None with ExitTransition.None
+                        else -> EnterTransition.None togetherWith ExitTransition.None
                     }.using(SizeTransform(clip = false))
                 },
             ) { targetState ->
@@ -471,7 +471,6 @@ fun CartBottomSheet(
     }
 }
 
-@ExperimentalAnimationApi
 @Preview(device = Devices.PIXEL_4)
 @Composable
 fun CartBottomSheetPreview() {

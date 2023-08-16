@@ -32,7 +32,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -135,7 +135,6 @@ private fun MenuSearchField() {
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun ShrineTopAppBar(
     backdropRevealed: Boolean,
@@ -201,13 +200,13 @@ private fun ShrineTopAppBar(
                     if (targetState) {
                         // Conceal to reveal
                         fadeIn(animationSpec = tween(durationMillis = 240, delayMillis = 120, easing = LinearEasing)) +
-                            slideInHorizontally(initialOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) with
+                            slideInHorizontally(initialOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) togetherWith
                         fadeOut(animationSpec = tween(durationMillis = 120, easing = LinearEasing)) +
                             slideOutHorizontally(targetOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 120, easing = LinearEasing))
                     } else {
                         // Reveal to conceal
                         fadeIn(animationSpec = tween(durationMillis = 180, delayMillis = 90, easing = LinearEasing)) +
-                            slideInHorizontally(initialOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) with
+                            slideInHorizontally(initialOffsetX = { with(density) { (-30).dp.roundToPx() } }, animationSpec = tween(durationMillis = 270, easing = LinearEasing)) togetherWith
                         fadeOut(animationSpec = tween(durationMillis = 90, easing = LinearEasing)) +
                             slideOutHorizontally(targetOffsetX = { with(density) { 30.dp.roundToPx() } }, animationSpec = tween(durationMillis = 90, easing = LinearEasing))
                     }.using(SizeTransform(clip = false))
@@ -234,7 +233,6 @@ private fun ShrineTopAppBar(
     )
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun ShrineTopAppBarPreview() {
@@ -266,7 +264,7 @@ private fun MenuText(
     }
 }
 
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedVisibilityScope.MenuItem(
     modifier: Modifier = Modifier,
@@ -289,7 +287,6 @@ fun AnimatedVisibilityScope.MenuItem(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun NavigationMenu(
     modifier: Modifier = Modifier,
@@ -348,7 +345,6 @@ private fun NavigationMenu(
     }
 }
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 fun NavigationMenuPreview() {
@@ -364,7 +360,6 @@ fun NavigationMenuPreview() {
     }
 }
 
-@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop(
@@ -434,7 +429,6 @@ fun Backdrop(
     )
 }
 
-@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Preview
 @Composable

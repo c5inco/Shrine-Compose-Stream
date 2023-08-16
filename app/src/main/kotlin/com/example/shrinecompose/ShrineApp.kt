@@ -16,7 +16,6 @@
 
 package com.example.shrinecompose
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
@@ -31,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Composable
 fun ShrineApp() {
     var sheetState by rememberSaveable { mutableStateOf(CartBottomSheetState.Collapsed) }
