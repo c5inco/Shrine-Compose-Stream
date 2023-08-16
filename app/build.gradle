@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace "com.example.shrinecompose"
     compileSdk 34
 
     defaultConfig {
