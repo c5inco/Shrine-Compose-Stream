@@ -44,13 +44,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CutCornerShape
@@ -79,6 +85,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -211,10 +218,12 @@ fun ExpandedCart(
         color = MaterialTheme.colors.secondary
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 64.dp)
         ) {
+            item {
+                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+            }
             item {
                 CartHeader(
                     cartSize = cartItems.size,
@@ -235,6 +244,13 @@ fun ExpandedCart(
                     )
                 }
             }
+            item {
+                Spacer(
+                    Modifier.windowInsetsBottomHeight(
+                        WindowInsets.systemBars
+                    )
+                )
+            }
         }
     }
 }
@@ -252,6 +268,7 @@ private fun CheckoutButton() {
     Button(
         modifier = Modifier
             .padding(16.dp)
+            .windowInsetsPadding(WindowInsets.navigationBars)
             .fillMaxWidth(),
         onClick = {}
     ) {
@@ -272,7 +289,8 @@ private fun CollapsedCart(
     Row(
         Modifier
             .clickable { onTap() }
-            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp),
+            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp)
+            .windowInsetsPadding(WindowInsets.navigationBars),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -398,7 +416,10 @@ fun CartBottomSheet(
             }
         }
     ) {
-        if (it == CartBottomSheetState.Expanded) maxHeight else 56.dp
+        val navBarHeight = with (LocalDensity.current) {
+            WindowInsets.navigationBars.getBottom(this).toDp() - WindowInsets.navigationBars.getTop(this).toDp()
+        }
+        if (it == CartBottomSheetState.Expanded) maxHeight else 56.dp + navBarHeight
     }
 
     val cornerSize by cartTransition.animateDp(

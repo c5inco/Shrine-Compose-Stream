@@ -19,6 +19,7 @@ package com.example.shrinecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +28,7 @@ import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 @ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             ShrineComposeTheme {
@@ -42,6 +44,5 @@ class MainActivity : ComponentActivity() {
 fun AppPreview() {
     ShrineComposeTheme {
         ShrineApp()
-
     }
 }
