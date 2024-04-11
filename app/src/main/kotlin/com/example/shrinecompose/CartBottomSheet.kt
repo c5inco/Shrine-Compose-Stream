@@ -18,9 +18,12 @@ package com.example.shrinecompose
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -39,7 +42,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -71,9 +73,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -264,15 +265,17 @@ private fun CheckoutButton() {
     }
 }
 
+context(SharedTransitionScope, AnimatedVisibilityScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun CollapsedCart(
     items: List<ItemData> = SampleItems.take(6),
+    onboardingState: OnboardedState,
     onTap: () -> Unit = {}
 ) {
-    Row(
-        Modifier
-            .clickable { onTap() }
-            .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp),
+    Row(Modifier
+        .clickable { onTap() }
+        .padding(start = 24.dp, top = 8.dp, bottom = 8.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -285,8 +288,10 @@ private fun CollapsedCart(
                 contentDescription = "Shopping cart icon",
             )
         }
-        items.take(3).forEach { item ->
-            CollapsedCartItem(data = item)
+        items.take(3).forEachIndexed { idx, item ->
+            key(idx, item.id) {
+                CollapsedCartItem(data = item, onboardingState = onboardingState)
+            }
         }
         if (items.size > 3) {
             Box(
@@ -303,32 +308,39 @@ private fun CollapsedCart(
     }
 }
 
+context(SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun CollapsedCartItem(data: ItemData) {
+private fun CollapsedCartItem(data: ItemData, onboardingState: OnboardedState,) {
     Image(
         painter = painterResource(id = data.photoResId),
         contentDescription = data.title,
         alignment = Alignment.TopCenter,
         contentScale = ContentScale.Crop,
         modifier = Modifier
+            .sharedElementWithCallerManagedVisibility(
+                rememberSharedContentState(key = "cartItem-${data.id}"),
+                true,
+            )
             .size(40.dp)
             .clip(RoundedCornerShape(10.dp))
     )
 }
 
-@Preview
-@Composable
-fun CollapsedCartPreview() {
-    ShrineComposeTheme {
-        Surface(
-            color = MaterialTheme.colors.secondary
-        ) {
-            CollapsedCart()
-        }
-    }
-}
+// @Preview
+// @Composable
+// fun CollapsedCartPreview() {
+//     ShrineComposeTheme {
+//         Surface(
+//             color = MaterialTheme.colors.secondary
+//         ) {
+//             CollapsedCart()
+//         }
+//     }
+// }
 
-@OptIn(ExperimentalAnimationApi::class)
+context(SharedTransitionScope)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun CartBottomSheet(
     modifier: Modifier = Modifier,
@@ -336,6 +348,7 @@ fun CartBottomSheet(
     maxHeight: Dp,
     maxWidth: Dp,
     sheetState: CartBottomSheetState = CartBottomSheetState.Collapsed,
+    onboardingState: OnboardedState,
     onRemoveItemFromCart: (Int) -> Unit = {},
     onSheetStateChange: (CartBottomSheetState) -> Unit = {}
 ) {
@@ -451,6 +464,7 @@ fun CartBottomSheet(
                 } else {
                     CollapsedCart(
                         items = items,
+                        onboardingState = onboardingState,
                         onTap = {
                             onSheetStateChange(CartBottomSheetState.Expanded)
                         }
@@ -471,35 +485,35 @@ fun CartBottomSheet(
     }
 }
 
-@Preview(device = Devices.PIXEL_4)
-@Composable
-fun CartBottomSheetPreview() {
-    ShrineComposeTheme {
-        BoxWithConstraints(
-            Modifier.fillMaxSize()
-        ) {
-            var sheetState by remember { mutableStateOf(CartBottomSheetState.Collapsed) }
-
-            Button(
-                onClick = {
-                    if (sheetState == CartBottomSheetState.Collapsed) {
-                        sheetState = CartBottomSheetState.Hidden
-                    } else {
-                        sheetState = CartBottomSheetState.Collapsed
-                    }
-                }
-            ) {
-                Text("Toggle BottomSheet")
-            }
-
-            CartBottomSheet(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                sheetState = sheetState,
-                maxHeight = maxHeight,
-                maxWidth = maxWidth
-            ) {
-                sheetState = it
-            }
-        }
-    }
-}
+// @Preview(device = Devices.PIXEL_4)
+// @Composable
+// fun CartBottomSheetPreview() {
+//     ShrineComposeTheme {
+//         BoxWithConstraints(
+//             Modifier.fillMaxSize()
+//         ) {
+//             var sheetState by remember { mutableStateOf(CartBottomSheetState.Collapsed) }
+//
+//             Button(
+//                 onClick = {
+//                     if (sheetState == CartBottomSheetState.Collapsed) {
+//                         sheetState = CartBottomSheetState.Hidden
+//                     } else {
+//                         sheetState = CartBottomSheetState.Collapsed
+//                     }
+//                 }
+//             ) {
+//                 Text("Toggle BottomSheet")
+//             }
+//
+//             CartBottomSheet(
+//                 modifier = Modifier.align(Alignment.BottomEnd),
+//                 sheetState = sheetState,
+//                 maxHeight = maxHeight,
+//                 maxWidth = maxWidth
+//             ) {
+//                 sheetState = it
+//             }
+//         }
+//     }
+// }

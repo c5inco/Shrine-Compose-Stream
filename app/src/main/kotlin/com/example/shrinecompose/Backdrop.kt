@@ -22,6 +22,8 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
@@ -360,10 +362,13 @@ fun NavigationMenuPreview() {
     }
 }
 
+context(SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun Backdrop(
     showScrim: Boolean = false,
+    onboardedState: OnboardedState,
     onAddCartItem: (ItemData) -> Unit = {},
     onBackdropReveal: (Boolean) -> Unit = {}
 ) {
@@ -407,6 +412,7 @@ fun Backdrop(
                 items = SampleItems.filter {
                     activeCategory == Category.All || it.category == activeCategory
                 },
+                onboardedState = onboardedState,
                 onAddCartItem = onAddCartItem
             )
         },
@@ -429,11 +435,11 @@ fun Backdrop(
     )
 }
 
-@ExperimentalMaterialApi
-@Preview
-@Composable
-fun BackdropPreview() {
-    ShrineComposeTheme {
-        Backdrop()
-    }
-}
+// @ExperimentalMaterialApi
+// @Preview
+// @Composable
+// fun BackdropPreview() {
+//     ShrineComposeTheme {
+//         Backdrop()
+//     }
+// }

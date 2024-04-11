@@ -16,6 +16,8 @@
 
 package com.example.shrinecompose
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +36,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddShoppingCart
@@ -44,15 +45,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.shrinecompose.ui.theme.ShrineComposeTheme
 
+context(SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun CatalogCard(
     modifier: Modifier = Modifier,
     data: ItemData,
+    onboardedState: OnboardedState,
     onAdd: (ItemData) -> Unit
 ) {
     Column(
@@ -63,14 +65,28 @@ private fun CatalogCard(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(Modifier.weight(1f)) {
-            Image(
-                painter = painterResource(id = data.photoResId),
-                contentDescription = "Photo of ${data.title}",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-            )
+            Box {
+                Image(
+                    painter = painterResource(id = data.photoResId),
+                    contentDescription = "Transition Photo of ${data.title}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .sharedElementWithCallerManagedVisibility(
+                            rememberSharedContentState(key = "cartItem-${data.id}"),
+                            onboardedState == OnboardedState.Start
+                        )
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                )
+                Image(
+                    painter = painterResource(id = data.photoResId),
+                    contentDescription = "Photo of ${data.title}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                )
+            }
             Icon(
                 imageVector = Icons.Outlined.AddShoppingCart,
                 contentDescription = "Add to shopping cart",
@@ -96,22 +112,25 @@ private fun CatalogCard(
     }
 }
 
-@Preview
-@Composable
-fun CatalogCardPreview() {
-    ShrineComposeTheme {
-        CatalogCard(
-            modifier = Modifier.height(380.dp),
-            data = SampleItems[0],
-            onAdd = { println(it) }
-        )
-    }
-}
+// @Preview
+// @Composable
+// fun CatalogCardPreview() {
+//     ShrineComposeTheme {
+//         CatalogCard(
+//             modifier = Modifier.height(380.dp),
+//             data = SampleItems[0],
+//             onAdd = { println(it) }
+//         )
+//     }
+// }
 
+context(SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Catalog(
     modifier: Modifier = Modifier,
     items: List<ItemData>,
+    onboardedState: OnboardedState,
     onAddCartItem: (ItemData) -> Unit = {}
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
@@ -141,6 +160,7 @@ fun Catalog(
                                 .weight(1f)
                                 .fillMaxWidth(0.85f),
                             data = item[1],
+                            onboardedState = onboardedState,
                             onAdd = onAddCartItem
                         )
                         Spacer(Modifier.height(40.dp))
@@ -149,6 +169,7 @@ fun Catalog(
                                 .weight(1f)
                                 .fillMaxWidth(0.85f),
                             data = item[0],
+                            onboardedState = onboardedState,
                             onAdd = onAddCartItem
                         )
                     } else {
@@ -157,6 +178,7 @@ fun Catalog(
                                 .fillMaxWidth(0.85f)
                                 .fillMaxHeight(0.5f),
                             data = item[0],
+                            onboardedState = onboardedState,
                             onAdd = onAddCartItem
                         )
                     }
@@ -167,6 +189,7 @@ fun Catalog(
                             .fillMaxWidth(0.8f)
                             .fillMaxHeight(0.85f),
                         data = item[0],
+                        onboardedState = onboardedState,
                         onAdd = onAddCartItem
                     )
                 }
@@ -189,16 +212,16 @@ private fun <T> transformToWeavedList(items: List<T>): List<List<T>> {
     return list.toList()
 }
 
-@Preview
-@Composable
-fun CatalogPreview() {
-    ShrineComposeTheme {
-        Surface {
-            Box(
-                Modifier.fillMaxSize()
-            ) {
-                Catalog(items = SampleItems.filter { it.category == Category.Accessories })
-            }
-        }
-    }
-}
+// @Preview
+// @Composable
+// fun CatalogPreview() {
+//     ShrineComposeTheme {
+//         Surface {
+//             Box(
+//                 Modifier.fillMaxSize()
+//             ) {
+//                 Catalog(items = SampleItems.filter { it.category == Category.Accessories })
+//             }
+//         }
+//     }
+// }
