@@ -3,6 +3,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://androidx.dev/snapshots/builds/11679629/artifacts/repository/") }
     }
 }
 rootProject.name = "ShrineCompose"
