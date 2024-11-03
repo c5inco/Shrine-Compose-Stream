@@ -35,7 +35,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,7 +62,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberBackdropScaffoldState
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -151,8 +149,6 @@ private fun ShrineTopAppBar(
                     .toggleable(
                         value = backdropRevealed,
                         onValueChange = { onBackdropReveal(it) },
-                        indication = rememberRipple(bounded = false, radius = 56.dp),
-                        interactionSource = remember { MutableInteractionSource() }
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
@@ -379,15 +375,13 @@ fun Backdrop(
             ShrineTopAppBar(
                 backdropRevealed = backdropRevealed,
                 onBackdropReveal = {
-                    if (!scaffoldState.isAnimationRunning) {
-                        backdropRevealed = it
-                        onBackdropReveal(it)
-                        scope.launch {
-                            if (scaffoldState.isConcealed) {
-                                scaffoldState.reveal()
-                            } else {
-                                scaffoldState.conceal()
-                            }
+                    backdropRevealed = it
+                    onBackdropReveal(it)
+                    scope.launch {
+                        if (scaffoldState.isConcealed) {
+                            scaffoldState.reveal()
+                        } else {
+                            scaffoldState.conceal()
                         }
                     }
                 }
