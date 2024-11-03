@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
     namespace "com.example.shrinecompose"
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.shrinecompose"
         minSdk 26
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
